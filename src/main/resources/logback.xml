@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration >
+<configuration scan="true" debug="false">
+	<contextName>SchoolFee</contextName>
+	<jmxConfigurator />
+	<substitutionProperty name="logs.dir" value="C:/log" />
+	<timestamp key="byDate" datePattern="yyyyMMdd"/>
+	<!-- 控制台日志输出 -->
+	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[%-5level] %date{yyyy-MM-dd HH:mm:ss} %logger \(%file:%line\) - %message%n</pattern>
+		</encoder>
+	</appender>
+	<!-- 输出error级别日志到文件 滚动 -->
+	<appender name="errorFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 当天的操作日志 -->
+		<file>${logs.dir}/error.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 前一天的操作日志 根据日期命名 -->
+			<fileNamePattern>${logs.dir}/error-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- 超过30天的日志 自动删除 -->
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%-5level] %date{yyyy-MM-dd HH:mm:ss} %logger \(%file:%line\) - %message%n</pattern>
+		</encoder>
+		<!-- 只打印错误日志 -->
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<!-- 日志内容追加 -->
+		<append>false</append>
+	</appender>
+	<!-- 输出info级别日志到文件 滚动 -->
+	<appender name="infoFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logs.dir}/info.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${logs.dir}/info-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%-5level] %date{yyyy-MM-dd HH:mm:ss} %logger \(%file:%line\) - %message%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<append>false</append>
+	</appender>
+	<!-- 输出debug级别日志到文件 滚动 -->
+	<appender name="debugFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logs.dir}/debug.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${logs.dir}/debug-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%-5level] %date{yyyy-MM-dd HH:mm:ss} %logger \(%file:%line\) - %message%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>DEBUG</level>
+			<!-- 记录事件被立即处理，不再经过剩余过滤器 -->
+			<onMatch>ACCEPT</onMatch>
+			<!-- 记录事件立即被抛弃，不再经过剩余过滤器 -->
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<append>false</append>
+	</appender>
+	<!-- 输出warn级别日志到文件 滚动 -->
+	<appender name="warnFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logs.dir}/warn.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${logs.dir}/warn-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%-5level] %date{yyyy-MM-dd HH:mm:ss} %logger \(%file:%line\) - %message%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>WARN</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<append>false</append>
+	</appender>
+ 	<logger name="org.springframework" level="debug"/>
+	<logger name="org.apache" level="WARN" />
+	<logger name="net.sf.ehcache" level="WARN"/>
+	
+	<!-- 日志输出级别 为debug -->
+	<root level="debug">
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="errorFileAppender" />
+		<appender-ref ref="infoFileAppender" />
+		<appender-ref ref="debugFileAppender" />
+		<appender-ref ref="warnFileAppender" />
+		<!-- 
+		<appender-ref ref="sqlConsoleAppender" />
+		 -->
+	</root>
+</configuration>
