@@ -2,16 +2,15 @@ package org.school.fee.support.utils;
 
 public class PaginationCriteria {
 	private int page;
-	private int totalCount;
+	private long totalCount;
 	private int pageSize = 20;
 	
-	public PaginationCriteria(int pageSize,int totalCount) {
-		this.pageSize = pageSize;
-		this.totalCount = totalCount;
+	
+	public PaginationCriteria() {
 	}
 	
-	public PaginationCriteria(int totalCount){
-		this.totalCount = totalCount;
+	public PaginationCriteria(int pageSize){
+		this.pageSize = pageSize;
 	}
 	
 	public int getTotalPage(){
@@ -25,11 +24,11 @@ public class PaginationCriteria {
 		this.page = page;
 	}
 
-	public int getTotalCount() {
+	public long getTotalCount() {
 		return totalCount;
 	}
 
-	public void setTotalCount(int totalCount) {
+	public void setTotalCount(long totalCount) {
 		this.totalCount = totalCount;
 	}
 
@@ -51,13 +50,5 @@ public class PaginationCriteria {
 
 	public int getStartRow(){
 		return this.page == 1?0 :(this.page - 1) * this.pageSize;
-	}
-	public int getEndRow(){
-		int end = this.page * this.pageSize - 1;
-		if(end>=totalCount){
-			return totalCount;
-		}else{
-			return end;
-		}
 	}
 }

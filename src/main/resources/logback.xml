@@ -87,9 +87,6 @@
 		<append>false</append>
 	</appender>
  	<logger name="org.springframework" level="debug"/>
-	<logger name="org.apache" level="WARN" />
-	<logger name="net.sf.ehcache" level="WARN"/>
-	
 	<!-- 日志输出级别 为debug -->
 	<root level="debug">
 		<appender-ref ref="consoleAppender" />

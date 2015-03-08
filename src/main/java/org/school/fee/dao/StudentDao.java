@@ -2,11 +2,10 @@ package org.school.fee.dao;
 
 import java.util.List;
 
-import org.bson.types.ObjectId;
-import org.school.fee.customdao.CustomStudentDao;
 import org.school.fee.models.Student;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import org.school.fee.support.utils.PaginationCriteria;
 
-public interface StudentDao  extends MongoRepository<Student, ObjectId>,CustomStudentDao{
+public interface StudentDao {
+	public long CountStudent(String keyword,Integer sex,Integer ageStart,Integer ageEnd);
+	List<Student> findStudent(PaginationCriteria page,String keyword,Integer sex,Integer ageStart,Integer ageEnd,String orderBy,String order);
 }

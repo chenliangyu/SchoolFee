@@ -192,13 +192,13 @@
 			<artifactId>logback-classic</artifactId>
 			<version>${logback.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.logback-extensions</groupId>
 			<artifactId>logback-ext-spring</artifactId>
 			<version>0.1.3-SNAPSHOT</version>
 			<scope>runtime</scope>
 		</dependency>
-
 		<!-- shiro -->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>

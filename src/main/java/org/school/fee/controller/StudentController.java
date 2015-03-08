@@ -1,6 +1,7 @@
 package org.school.fee.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.school.fee.models.Student;
@@ -22,9 +23,16 @@ public class StudentController extends AbstractController {
 	StudentService studentService;
 	
 	@RequestMapping("/")
-	public ModelAndView index(Integer page,String keyword,String searchField,String sort,Integer order){
+	public ModelAndView index(Integer pageNo,String keyword,Integer ageStart,Integer ageEnd,Integer sex,String orderBy,String order){
 		logger.debug("url:{}","/action/student/");
-		return new ModelAndView("/desktop/index");
+		Map<String,Object> result = new HashMap<String,Object>();
+		PaginationCriteria page = new PaginationCriteria();
+		long count = studentService.countStudent(keyword, sex, ageStart, ageEnd);
+		page.setPage(pageNo);
+		List<Student> students = studentService.getStudent(page, keyword, sex, ageStart, ageEnd, orderBy, order);
+		result.put("total", count);
+		result.put("data", students);
+		return new ModelAndView("/desktop/index").addObject("result", result);
 	}
 	
 	@RequestMapping("/add")
