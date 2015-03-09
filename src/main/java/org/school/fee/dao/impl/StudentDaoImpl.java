@@ -6,12 +6,16 @@ import java.util.regex.Pattern;
 
 
 
+
+
+
 import org.school.fee.dao.StudentDao;
 import org.school.fee.models.Student;
-import org.school.fee.support.utils.PaginationCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -53,23 +57,21 @@ public class StudentDaoImpl implements StudentDao{
 	}
 	
 	
-	public List<Student> findStudent(PaginationCriteria page, String keyword,
-			Integer sex, Integer ageStart, Integer ageEnd, String orderBy,
-			String order) {
+	public Page<Student> findStudent(Pageable page, String keyword,
+			Integer sex, Integer ageStart, Integer ageEnd) {
 		// TODO Auto-generated method stub
 		Query query = createFindQuery(keyword, sex, ageStart, ageEnd);
-		query.skip(page.getStartRow());
+		query.skip(page.getOffset());
 		query.limit(page.getPageSize());
-		if(orderBy!=null){
-			if(order == null) {
-				order = "asc";
-			}
-			query.with(new Sort(Direction.fromString(order),orderBy));
+		Sort sort = page.getSort();
+		if(sort!=null){
+			query.with(sort);
 		}
-		return mongoTemplate.find(query, Student.class);
+		List<Student> students = mongoTemplate.find(query, Student.class);
+		long total = CountStudent(keyword, sex, ageStart, ageEnd);
+		return new PageImpl<Student>(students,page,total);
 	}
 
-	@Override
 	public long CountStudent(String keyword, Integer sex, Integer ageStart,
 			Integer ageEnd) {
 		Query query = createFindQuery(keyword, sex, ageStart, ageEnd);

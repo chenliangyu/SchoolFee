@@ -2,20 +2,26 @@ package com.school.fee.mongdb.test.service;
 
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.bson.types.ObjectId;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.school.fee.models.Fee;
 import org.school.fee.models.Student;
+import org.school.fee.repository.FeeRepository;
 import org.school.fee.service.StudentService;
-import org.school.fee.support.utils.PaginationCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.core.MongoTemplate;
+
+import static org.springframework.data.mongodb.core.query.Query.query;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -60,53 +66,79 @@ public class StudentServiceTest extends AbstractJUnit4SpringContextTests{
 		mongoTemplate.dropCollection(Student.class);
 	}
 	
+	
+	
 	@Test
-	public void TestCountStudent(){
-		long count = studentService.countStudent(null,null,null,null);
-		assertEquals(3, count);
+	public void testFindStudent(){
+		Page<Student> students= studentService.getStudent(0,20,null, null, null, null, null, null);
+		assertEquals(3, students.getNumberOfElements());
 		
-		count = studentService.countStudent("王诗龄", null,null,null);
-		assertEquals(1,count);
+		students = studentService.getStudent(0,20,"王诗龄", null,null,null,null,null);
+		assertEquals(1, students.getNumberOfElements());
 		
-		count = studentService.countStudent("李", null, null, null);
-		assertEquals(1,count);
+		students = studentService.getStudent(0,20,"李", null,null,null,null,null);
+		assertEquals(1, students.getNumberOfElements());
 		
-		count = studentService.countStudent("12345", null, null, null);
-		assertEquals(1,count);
+		students = studentService.getStudent(0,20,"12345", null, null, null,null,null);
+		assertEquals(1,students.getNumberOfElements());
 		
-		count = studentService.countStudent("李", 0, null, null);
-		assertEquals(0,count);
+		students = studentService.getStudent(0,20,"李", 0,null,null,null,null);
+		assertEquals(0,students.getNumberOfElements());
 		
-		count = studentService.countStudent(null, 1, null, null);
-		assertEquals(2,count);
+		students = studentService.getStudent(0,20,null, 1, null, null,null,null);
+		assertEquals(2,students.getNumberOfElements());
 		
-		count = studentService.countStudent(null,null,7, 10);
-		assertEquals(2,count);
+		students = studentService.getStudent(0,20,null,null,7, 10,null,null);
+		assertEquals(2,students.getNumberOfElements());
 	}
 	
 	@Test
-	public void TestFindStudent(){
-		PaginationCriteria page = new PaginationCriteria();
-		page.setPage(1);
-		List<Student> students= studentService.getStudent(page, null, null, null, null, null, null);
-		assertEquals(3, students.size());
+	public void testDeleteStudent(){
+		List<Student> students = mongoTemplate.findAll(Student.class);
+		for(Student student:students){
+			studentService.deleteStudent(student.getId());
+		}
+		long total = mongoTemplate.count(null, Student.class);
+		assertEquals(0,total);
+	}
+	
+	@Test
+	public void testAddStudent(){
+		Student student = new Student();
+		student.setAge(10);
+		student.setName("天天");
+		student.setFatherName("张亮");
+		student.setPhone("1234567");
+		student.setSchool("补习班");
+		student.setSex(0);
+		studentService.insertStudent(student);
+		assertEquals(4,mongoTemplate.count(null, Student.class));
+	}
+	
+	@Test
+	public void testSaveStudent(){
+		Student student = mongoTemplate.findOne(query(where("name").is("天天")),Student.class);
+		student.setAge(12);
+		studentService.saveStudent(student);
+		Student studentAfterSave = mongoTemplate.findOne(query(where("name").is("天天")),Student.class);
+		assertEquals(studentAfterSave.getAge(),12);
 		
-		students = studentService.getStudent(page,"王诗龄", null,null,null,null,null);
-		assertEquals(1, students.size());
+	}
+	
+	@Test
+	public void testAddFeeForStudent(){
+		Fee fee = new Fee();
+		fee.setMoney(1000.20);
+		fee.setName("学费");
+		mongoTemplate.save(fee);
+		Fee fee1 = new Fee();
+		fee1.setMoney(200.20);
+		fee1.setName("生活费");
+		mongoTemplate.save(fee1);
+		Student student = mongoTemplate.findOne(query(where("name").is("天天")),Student.class);
+		studentService.addFeeDesc(student.getId(), new ObjectId[]{fee.getId(),fee1.getId()});
 		
-		students = studentService.getStudent(page,"李", null,null,null,null,null);
-		assertEquals(1, students.size());
-		
-		students = studentService.getStudent(page,"12345", null, null, null,null,null);
-		assertEquals(1,students.size());
-		
-		students = studentService.getStudent(page,"李", 0,null,null,null,null);
-		assertEquals(0,students.size());
-		
-		students = studentService.getStudent(page,null, 1, null, null,null,null);
-		assertEquals(2,students.size());
-		
-		students = studentService.getStudent(page,null,null,7, 10,null,null);
-		assertEquals(2,students.size());
+		Student studentAfterAddRef = mongoTemplate.findOne(query(where("name").is("天天")),Student.class);
+		assertEquals(studentAfterAddRef.getFees().size(), 2);
 	}
 }

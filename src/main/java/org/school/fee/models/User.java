@@ -2,9 +2,11 @@ package org.school.fee.models;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -20,6 +22,17 @@ public class User implements Serializable{
 	private String nickname;
 	private String role;
 	private Date lastLoginTime;
+	@DBRef
+	private List<Fee> fees;
+	
+	
+	public List<Fee> getFees() {
+		return fees;
+	}
+
+	public void setFees(List<Fee> fees) {
+		this.fees = fees;
+	}
 
 	public ObjectId getId() {
 		return id;
