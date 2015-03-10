@@ -1,17 +1,8 @@
 package org.school.fee.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-
-
-
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -30,9 +21,6 @@ public class Student implements Serializable{
 	private String klass;
 	private String school;
 	private String phone;
-	@DBRef
-	private List<Fee> fees = new ArrayList<Fee>();
-	
 	public ObjectId getId() {
 		return id;
 	}
@@ -86,23 +74,5 @@ public class Student implements Serializable{
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
-	}
-	public List<Fee> getFees() {
-		return fees;
-	}
-	public void setFees(List<Fee> fees) {
-		this.fees = fees;
-	}
-	public void addFee(Fee fee){
-		if(fee!=null){
-			Iterator<Fee> feeIt = fees.iterator();
-			while(feeIt.hasNext()){
-				Fee feeInList = feeIt.next();
-				if(feeInList.getId().equals(fee.getId())){
-					return;
-				}
-			}
-			fees.add(fee);
-		}
 	}
 }

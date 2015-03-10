@@ -19,4 +19,5 @@
 	<context:component-scan base-package="org.school.fee.dao" />
 	<import resource="db-config.xml"/>
 	<import resource="shiro-config.xml"/>
+	<import resource="batch-config.xml"/>
 </beans>

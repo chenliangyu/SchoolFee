@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.school.fee.models.Fee;
@@ -35,11 +37,11 @@ public class FeeServiceTest {
 		feeService.insertFee(fee);
 		assertNotNull(fee.getId());
 		List<Fee> feesInDb = mongoTemplate.findAll(Fee.class);
-		assertEquals(1, feesInDb.size());
-		Fee feeInDb = feesInDb.get(0);
+		assertEquals(4, feesInDb.size());
+		Fee feeInDb = feesInDb.get(3);
 		assertEquals(feeInDb.getId(),fee.getId());
-		mongoTemplate.dropCollection(Fee.class);
 	}
+	@Before
 	public void InsertData(){
 		Fee fee = new Fee();
 		fee.setMoney(1000.10);
@@ -55,34 +57,30 @@ public class FeeServiceTest {
 		feeService.insertFee(fee);
 		assertEquals(3,mongoTemplate.findAll(Fee.class).size());
 	}
+	@After
+	public void dropCollection(){
+		mongoTemplate.dropCollection(Fee.class);
+	}
+	
 	@Test
 	public void testSaveFee(){
-		InsertData();
 		Fee fee = mongoTemplate.findOne(query(where("name").is("学费")), Fee.class);
 		fee.setName("学费改");
 		feeService.saveFee(fee);
 		Fee feeInDb = mongoTemplate.findOne(query(where("name").is("学费改")), Fee.class);
 		assertEquals(feeInDb.getId(), fee.getId());
-		mongoTemplate.dropCollection(Fee.class);
 	}
 	
 	@Test
 	public void testListFee(){
-		InsertData();
-		Page<Fee> fee = feeService.listFee(0,20, "学", null, null);
-		assertEquals(fee.getNumberOfElements(), 2);
-		Page<Fee> fee1 = feeService.listFee(0,2,null, null, null);
-		assertEquals(fee1.getNumberOfElements(),2);
-		assertEquals(fee1.getTotalPages(),2);
-		assertEquals(fee1.getTotalElements(),3);
-		Page<Fee> fee2 = feeService.listFee(0,20, null, "money", "asc");
-		assertEquals(fee2.getContent().get(0).getName(),"学费");
-		mongoTemplate.dropCollection(Fee.class);
+		List<Fee> fee = feeService.listFee("学");
+		assertEquals(fee.size(), 2);
+		List<Fee> fee1 = feeService.listFee(null);
+		assertEquals(fee1.size(),3);
 	}
 	
 	@Test
 	public void testDeleteFee(){
-		InsertData();
 		List<Fee> fees = mongoTemplate.findAll(Fee.class);
 		for(Fee fee:fees){
 			feeService.deleteFee(fee.getId());

@@ -237,6 +237,14 @@
 			<artifactId>spring-data-mongodb-log4j</artifactId>
 			<version>${spring.data.version}</version>
 		</dependency>
+		
+		<!-- quartz-scheduler -->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<finalName>SchoolFee</finalName>
