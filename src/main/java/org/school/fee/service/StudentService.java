@@ -12,5 +12,5 @@ public interface StudentService {
 	public Page<Student> getStudent(Integer page,Integer pageSize,String keyword,Integer sex,Integer ageStart,Integer ageEnd,String orderBy,String order);
 	public void deleteStudent(ObjectId id);
 	public void deleteStudent(ObjectId[] ids);
-	public void addFeeDesc(ObjectId studentId,ObjectId[] feeIds);
+	public Student getStudent(ObjectId studentId);
 }

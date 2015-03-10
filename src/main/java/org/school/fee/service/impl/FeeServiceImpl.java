@@ -1,6 +1,8 @@
 package org.school.fee.service.impl;
 
 
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.school.fee.models.Fee;
 import org.school.fee.repository.FeeRepository;
@@ -22,13 +24,12 @@ public class FeeServiceImpl implements FeeService {
 		feeRepository.save(fee);
 	}
 
-	public Page<Fee> listFee(Integer page, Integer pageSize,String name,String orderBy,String order) {
+	public List<Fee> listFee(String name) {
 		// TODO Auto-generated method stub
-		Pageable pageable = PageUtils.buildPageRequest(page, pageSize, orderBy, order);
 		if(name!=null){
-			return feeRepository.findByNameLike(name,pageable);
+			return feeRepository.findByNameLike(name);
 		}else{
-			return feeRepository.findAll(pageable);
+			return feeRepository.findAll();
 		}
 	}
 

@@ -3,12 +3,11 @@ package org.school.fee.models;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -20,22 +19,15 @@ public class Payment implements Serializable{
 	@Id
 	private ObjectId id;
 	private ObjectId studentId;
-	@DBRef
-	private Fee fee;
-	private int payMethod;
-	private int instalmentNumber;
-	private int instalmentPeriod;//0:月,1:年,2:周
-	private int dayOfMonth;
-	private int monthOfYear;
-	private int dayOfWeek;//1-7：星期一-星期日
-	private List<Double> payMoney = new ArrayList<Double>();
-	@Transient
-	private Double currentPayMoney;
-	@Transient
-	private Double restMoney;
-	@Transient
-	private int restInstalmentNumber;
-	
+	private String studentName;
+	private ObjectId feeId;
+	private String feeName;
+	private BigDecimal feeMoney;
+	private String klass;
+	private String school;
+	private List<BigDecimal> money = new ArrayList<BigDecimal>();
+	private Date payDate;
+	private Date expireDate;
 	public ObjectId getId() {
 		return id;
 	}
@@ -48,93 +40,71 @@ public class Payment implements Serializable{
 	public void setStudentId(ObjectId studentId) {
 		this.studentId = studentId;
 	}
-	public Fee getFee() {
-		return fee;
+	public String getStudentName() {
+		return studentName;
 	}
-	public void setFee(Fee fee) {
-		this.fee = fee;
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
 	}
-	public int getPayMethod() {
-		return payMethod;
+	public ObjectId getFeeId() {
+		return feeId;
 	}
-	public void setPayMethod(int payMethod) {
-		this.payMethod = payMethod;
+	public void setFeeId(ObjectId feeId) {
+		this.feeId = feeId;
 	}
-	public int getInstalmentNumber() {
-		return instalmentNumber;
+	public String getFeeName() {
+		return feeName;
 	}
-	public void setInstalmentNumber(int instalmentNumber) {
-		this.instalmentNumber = instalmentNumber;
+	public void setFeeName(String feeName) {
+		this.feeName = feeName;
 	}
-	public int getInstalmentPeriod() {
-		return instalmentPeriod;
+	public BigDecimal getFeeMoney() {
+		return feeMoney;
 	}
-	public void setInstalmentPeriod(int instalmentPeriod) {
-		this.instalmentPeriod = instalmentPeriod;
+	public void setFeeMoney(BigDecimal feeMoney) {
+		this.feeMoney = feeMoney;
 	}
-	public int getDayOfMonth() {
-		return dayOfMonth;
+	public Date getPayDate() {
+		return payDate;
 	}
-	public void setDayOfMonth(int dayOfMonth) {
-		this.dayOfMonth = dayOfMonth;
+	public void setPayDate(Date payDate) {
+		this.payDate = payDate;
 	}
-	public int getMonthOfYear() {
-		return monthOfYear;
+	public List<BigDecimal> getMoney() {
+		return money;
 	}
-	public void setMonthOfYear(int monthOfYear) {
-		this.monthOfYear = monthOfYear;
+	public void setMoney(List<BigDecimal> money) {
+		this.money = money;
 	}
-	public int getDayOfWeek() {
-		return dayOfWeek;
+	public Date getExpireDate() {
+		return expireDate;
 	}
-	public void setDayOfWeek(int dayOfWeek) {
-		this.dayOfWeek = dayOfWeek;
+	public void setExpireDate(Date expireDate) {
+		this.expireDate = expireDate;
 	}
-	public List<Double> getPayMoney() {
-		return payMoney;
+	public void pay(BigDecimal money){
+		this.money.add(money);
 	}
-	public void setPayMoney(List<Double> payMoney) {
-		this.payMoney = payMoney;
+	public String getKlass() {
+		return klass;
 	}
-	public Double getCurrentPayMoney() {
-		return currentPayMoney;
+	public void setKlass(String klass) {
+		this.klass = klass;
 	}
-	public void setCurrentPayMoney(Double currentPayMoney) {
-		this.currentPayMoney = currentPayMoney;
+	public String getSchool() {
+		return school;
 	}
-	public void pay(double money){
-		payMoney.add(money);
+	public void setSchool(String school) {
+		this.school = school;
 	}
-	public double getPayTotal(){
-		double sum = 0;
-		for(double money:payMoney){
-			sum+=money;
-		}
-		return sum;
+	@Override
+	public String toString() {
+		return "Payment [id=" + id + ", studentId=" + studentId
+				+ ", studentName=" + studentName + ", feeId=" + feeId
+				+ ", feeName=" + feeName + ", feeMoney=" + feeMoney
+				+ ", klass=" + klass + ", school=" + school + ", money="
+				+ money + ", payDate=" + payDate + ", expireDate=" + expireDate
+				+ "]";
 	}
-	public double getRestMoney(){
-		double sum = getPayTotal();
-		restMoney = (fee.getMoney() - sum);
-		return restMoney;
-	}
-	public void setRestMoney(double restMoney){
-		this.restMoney = restMoney;
-	}
-	public int getRestInstalmentNumber(){
-		return 0;
-	}
-	public double getCurrentRestMoney(){
-		if(payMethod == 0){
-			return getRestMoney();
-		}else{
-			double instalment = getInstalment();
-			double sum = getPayTotal();
-			return sum%instalment;
-		}
-	}
-	public double getInstalment(){
-		double total = fee.getMoney();
-		double each = total/instalmentNumber;
-		return Math.round(each * 10)/10;
-	}
+	
 }

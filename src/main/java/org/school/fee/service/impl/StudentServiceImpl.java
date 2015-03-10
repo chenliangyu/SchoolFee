@@ -49,12 +49,8 @@ public class StudentServiceImpl implements StudentService{
 			deleteStudent(id);
 		}
 	}
-	public void addFeeDesc(ObjectId studentId, ObjectId[] feeIds) {
+	public Student getStudent(ObjectId studentId) {
 		// TODO Auto-generated method stub
-		Student student = studentRepository.findOne(studentId);
-		for(ObjectId id:feeIds){
-			student.addFee(feeRepository.findOne(id));
-		}
-		saveStudent(student);
+		return studentRepository.findOne(studentId);
 	}
 }

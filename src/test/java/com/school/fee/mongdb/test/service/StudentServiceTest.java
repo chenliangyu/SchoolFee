@@ -124,21 +124,4 @@ public class StudentServiceTest extends AbstractJUnit4SpringContextTests{
 		assertEquals(studentAfterSave.getAge(),12);
 		
 	}
-	
-	@Test
-	public void testAddFeeForStudent(){
-		Fee fee = new Fee();
-		fee.setMoney(1000.20);
-		fee.setName("学费");
-		mongoTemplate.save(fee);
-		Fee fee1 = new Fee();
-		fee1.setMoney(200.20);
-		fee1.setName("生活费");
-		mongoTemplate.save(fee1);
-		Student student = mongoTemplate.findOne(query(where("name").is("天天")),Student.class);
-		studentService.addFeeDesc(student.getId(), new ObjectId[]{fee.getId(),fee1.getId()});
-		
-		Student studentAfterAddRef = mongoTemplate.findOne(query(where("name").is("天天")),Student.class);
-		assertEquals(studentAfterAddRef.getFees().size(), 2);
-	}
 }

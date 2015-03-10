@@ -1,5 +1,8 @@
 package org.school.fee.controller;
 
+import java.util.List;
+
+import org.bson.types.ObjectId;
 import org.school.fee.models.Fee;
 import org.school.fee.service.FeeService;
 import org.school.fee.support.utils.Result;
@@ -18,29 +21,30 @@ public class FeeController extends AbstractController{
 	FeeService feeService;
 	
 	@RequestMapping("/")
-	public ModelAndView list(){
+	public ModelAndView list(String name){
 		logger.debug("uri:{}","/action/fee/");
-		return new ModelAndView("/fee/list");
+		logger.debug("name filter : {}",name);
+		List<Fee> fees = feeService.listFee(name);
+		return new ModelAndView("/fee/list").addObject("result", new Result("success",fees));
 	}
-	
-	@RequestMapping("/fee/add")
-	public ModelAndView add(){
-		logger.debug("uri:{}","/action/fee/add");
-		return new ModelAndView("fee/add");
-	}
-	
-	@RequestMapping("/fee/postadd")
+	@RequestMapping("/postadd")
 	public ModelAndView postadd(Fee fee){
 		logger.debug("uri:{}","/action/fee/postadd");
 		logger.debug("fee:{}",fee);
-		feeService.saveFee(fee);
-		Result result = new Result("添加成功","success");
-		return new ModelAndView("fee/add").addObject("result", result);
+		Boolean isModify = fee.getId() != null;
+		if(isModify){
+			feeService.saveFee(fee);
+		}else{
+			feeService.insertFee(fee);
+		}
+		return new ModelAndView("fee/add").addObject("result", new Result("添加成功","success"));
 	}
 	
-	@RequestMapping("/fee/pay")
-	public ModelAndView pay(Integer studentId){
-		return new ModelAndView("fee/pay");
+	@RequestMapping("/delete")
+	public ModelAndView delete(ObjectId[] ids){
+		logger.debug("uri:{}","/action/fee/delete");
+		logger.debug("ids:{}",ids);
+		feeService.deleteFee(ids);
+		return new ModelAndView("fee/delete").addObject("result", new Result("删除成功","success"));
 	}
-	
 }
