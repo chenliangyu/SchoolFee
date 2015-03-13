@@ -45,32 +45,49 @@
                                 </div>
                             </div>
                             <div class="box-content">
-                                <div class="btn-toolbar pull-right">
-                                    <div class="btn-group">
-                                        <a class="btn btn-circle show-tooltip" title="添加学生" href="add_student.html"><i class="icon-plus"></i></a>
-                                        <a class="btn btn-circle show-tooltip" title="删除选中的学生" href="#"><i class="icon-trash"></i></a>
-                                    </div>
-                                    <div class="btn-group">
-                                        <a class="btn btn-circle show-tooltip" title="打印" href="#"><i class="icon-print"></i></a>
-                                        <a class="btn btn-circle show-tooltip" title="导出到pdf" href="#"><i class="icon-file-text-alt"></i></a>
-                                        <a class="btn btn-circle show-tooltip" title="导出到excel" href="#"><i class="icon-table"></i></a>
-                                    </div>
-                                    <div class="btn-group">
-                                        <a class="btn btn-circle show-tooltip" title="刷新" href="#"><i class="icon-repeat"></i></a>
-                                    </div>
+                                <div class="btn-toolbar">
+                                    <a href='${ctx}/action/student/add' class="btn btn-primary"><i class="icon-cog"></i> 添加学生</a>
+                                    <button class="btn btn-info"><i class="icon-cog"></i> 搜索</button>
+                                    <button class="btn btn-danger"><i class="icon-cog"></i> 删除</button>
                                 </div>
                                 <table class="table table-striped table-hover fill-head">
                                     <thead>
                                     <tr>
                                         <th style="width: 18px"><input type="checkbox" /></th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Username</th>
-                                        <th style="width: 150px">Action</th>
+                                        <th>姓名</th>
+                                        <th>年龄</th>
+                                        <th>性别</th>
+                                        <th>父亲</th>
+                                        <th>母亲</th>
+                                        <th>班级</th>
+                                        <th>学校</th>
+                                        <th>家长电话</th>
+                                        <th style="width: 250px">操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
+                                    <#if result??>
+                                    	<#list result.content as data>
+                                    		<tr>
+		                                        <td><input type="checkbox" name="ids" value="${data.id}" /></td>
+		                                        <td>${data.name}</td>
+		                                        <td>${data.age}</td>
+		                                        <td><#if data.sex==0>男<#else>女</#if></td>
+		                                        <td>${data.fatherName}</td>
+		                                        <td>${data.motherName}</td>
+		                                        <td>${data.klass}</td>
+		                                        <td>${data.school}</td>
+		                                        <td>${data.phone}</td>
+		                                        <td>
+		                                            <a class="btn btn-primary btn-small"  href="#"><i class="icon-edit"></i> 编辑</a>
+		                                            <a class="btn btn-danger btn-small"  href="#"><i class="icon-trash"></i> 删除</a>
+		                                            <a class="btn btn-danger btn-small"  href="#"><i class="icon-trash"></i> 缴费</a>
+		                                        </td>
+		                                    </tr>
+                                    	</#list>
+                                    </#if>
+                                    
+                                    <!--<tr>
                                         <td><input type="checkbox" value="1" /></td>
                                         <td>Mark</td>
                                         <td>Otto<span class="label label-info pull-right"><i class="icon-twitter"></i> New Twitte</span></td>
@@ -78,6 +95,7 @@
                                         <td>
                                             <a class="btn btn-primary btn-small"  href="#"><i class="icon-edit"></i> 编辑</a>
                                             <a class="btn btn-danger btn-small"  href="#"><i class="icon-trash"></i> 删除</a>
+                                            <a class="btn btn-danger btn-small"  href="#"><i class="icon-trash"></i> 缴费</a>
                                         </td>
                                     </tr>
                                     <tr>
@@ -99,7 +117,7 @@
                                             <a class="btn btn-primary btn-small" href="#"><i class="icon-edit"></i> 编辑</a>
                                             <a class="btn btn-danger btn-small"  href="#"><i class="icon-trash"></i> 删除</a>
                                         </td>
-                                    </tr>
+                                    </tr>-->
                                     </tbody>
                                 </table>
                                 <div class="pagination text-center">

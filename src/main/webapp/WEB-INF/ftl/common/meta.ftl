@@ -15,3 +15,6 @@
 <link rel="stylesheet" href="${ctx}/css/flaty-responsive.css">
 <link rel="shortcut icon" href="${ctx}/img/favicon.html">
 <script src="${ctx}/assets/modernizr/modernizr-2.6.2.min.js"></script>
+<script>
+	var base = "${ctx}";
+</script>

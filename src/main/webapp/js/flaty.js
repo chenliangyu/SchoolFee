@@ -1338,4 +1338,22 @@ $(function() {
             minSpotColor: "#f7941d"
         })
     }
-})
+});
+(function(){
+	function getMessageCount(){
+		$.ajax({
+			url : base + "/action/message/getcount",
+			type:"get",
+			dataType : "json"
+		}).done(function(data){
+			if(data && data.result && data.result.code === "success"){
+				var count = parserInt(data.result.data);
+				count && $(".message_count").html(data.result.data);
+			}
+		});
+	}
+	getMessageCount();
+	setInterval(function(){
+		getMessageCount()
+	}, 60 * 1000);
+})();

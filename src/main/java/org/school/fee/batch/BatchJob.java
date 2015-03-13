@@ -11,6 +11,7 @@ import org.school.fee.service.PaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 
 public class BatchJob {
 	private Logger logger = LoggerFactory.getLogger(BatchJob.class);
@@ -19,7 +20,7 @@ public class BatchJob {
 	@Autowired
 	MessageService messageService;
 	
-	
+	@Scheduled(cron="0 0 10 * * ?")
 	public void execute(){  
 		try{
 			List<Payment> payments = paymentService.findNotClearPaymentByDate(new Date());
