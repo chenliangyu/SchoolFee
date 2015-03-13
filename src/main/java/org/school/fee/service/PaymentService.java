@@ -23,4 +23,5 @@ public interface PaymentService {
 	public Page<Payment> listPaymentFromFee(Integer page,Integer pageSize,ObjectId feeId,
 			String studentName,	String klass,String school,Boolean notClear,
 			Date startDate,Date endDate,String orderBy,String order);
+	public List<Payment> findNotClearPaymentByDate(Date date);
 }

@@ -12,13 +12,12 @@ public class PageUtils {
 		if(page == null){
 			page = 0;
 		}
-		if(orderBy!=null){
-			if(order == null){
-				order = "desc";
-			}
-			return new PageRequest(page,pageSize,Direction.fromString(order),orderBy);
-		}else{
-			return new PageRequest(page,pageSize);
+		if(orderBy == null){
+			orderBy = "id";
 		}
+		if(order == null){
+			order = "desc";
+		}
+		return new PageRequest(page,pageSize,Direction.fromString(order),orderBy);
 	}
 }

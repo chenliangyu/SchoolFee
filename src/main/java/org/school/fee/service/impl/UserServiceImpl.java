@@ -25,5 +25,10 @@ public class UserServiceImpl implements UserService {
 	public void saveUser(User user) {
 		// TODO Auto-generated method stub
 		userDao.save(user);
+	}
+
+	public User findAdmin() {
+		// TODO Auto-generated method stub
+		return userDao.findOneByRole("admin");
 	}	
 }

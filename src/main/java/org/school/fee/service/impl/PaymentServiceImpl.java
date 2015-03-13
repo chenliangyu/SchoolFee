@@ -1,5 +1,6 @@
 package org.school.fee.service.impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -76,6 +77,19 @@ public class PaymentServiceImpl implements PaymentService{
 		Pageable pageable = PageUtils.buildPageRequest(page, pageSize, orderBy, order);
 		return paymentDao.findPayment(pageable, null, studentName, klass, school, feeId, 
 				null, notClear, startDate, endDate);
+	}
+
+	public List<Payment> findNotClearPaymentByDate(Date date) {
+		// TODO Auto-generated method stub
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		int year = c.get(Calendar.YEAR);
+		int month = c.get(Calendar.MONTH);
+		int day = c.get(Calendar.DAY_OF_MONTH);
+		c.set(year, month, day, 0, 0,0);
+		c.add(Calendar.DAY_OF_MONTH, -1);
+		Date yesterday = c.getTime();
+		return paymentDao.findNotClearPaymentByExpireDate(yesterday);
 	}
 
 }

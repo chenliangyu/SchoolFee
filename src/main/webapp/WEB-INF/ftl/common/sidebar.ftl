@@ -48,12 +48,6 @@
                 <span>消息通知</span>
             </a>
         </li>
-        <li>
-            <a href="skin.html" class="dropdown-toggle">
-                <i class="icon-edit"></i>
-                <span>皮肤设置</span>
-            </a>
-        </li>
     </ul>
     <!-- END Navlist -->
 
