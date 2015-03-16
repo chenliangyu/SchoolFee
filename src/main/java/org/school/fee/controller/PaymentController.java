@@ -57,8 +57,11 @@ public class PaymentController extends AbstractController {
 	public ModelAndView add(Payment payment,BigDecimal money){
 		logger.debug("uri:{}","/action/payment/add");
 		logger.debug("payment:{}",payment);
-		payment.pay(money);
 		paymentService.addPayment(payment);
+		if(money!=null && money.compareTo(BigDecimal.ZERO)>0){
+			paymentService.pay(payment, money);
+			//paymentService.pay(payment, money);
+		}
 		return new ModelAndView("/payment/index").addObject("result", new Result("添加成功","success"));
 	}
 	
@@ -67,8 +70,7 @@ public class PaymentController extends AbstractController {
 		logger.debug("uri:{}","/action/pay/"+paymentId);
 		Payment payment = paymentService.getPayment(paymentId);
 		logger.debug("payment : {}",payment);
-		payment.pay(money);
-		paymentService.savePayment(payment);
+		paymentService.pay(payment, money);
 		return new ModelAndView("/payment/index").addObject("result",new Result("缴费成功","success"));
 	}
 	

@@ -65,9 +65,6 @@ public class MessageServiceTest {
 		payment.setStudentName(student.getName());
 		payment.setSendNotify(true);
 		payment.setSendMessage(true);
-		payment.pay(new BigDecimal(200));
-		payment.pay(new BigDecimal(400));
-		payment.pay(new BigDecimal(300));
 		Date now = new Date();
 		payment.setExpireDate(now);
 		paymentService.savePayment(payment);
@@ -94,9 +91,6 @@ public class MessageServiceTest {
 		payment.setStudentName(student.getName());
 		payment.setSendNotify(true);
 		payment.setSendMessage(true);
-		payment.pay(new BigDecimal(200));
-		payment.pay(new BigDecimal(400));
-		payment.pay(new BigDecimal(300));
 		Date now = new Date();
 		payment.setExpireDate(now);
 		paymentService.savePayment(payment);
@@ -120,9 +114,6 @@ public class MessageServiceTest {
 		payment.setStudentName(student.getName());
 		payment.setSendNotify(true);
 		payment.setSendMessage(true);
-		payment.pay(new BigDecimal(200));
-		payment.pay(new BigDecimal(400));
-		payment.pay(new BigDecimal(300));
 		Date now = new Date();
 		payment.setExpireDate(now);
 		paymentService.savePayment(payment);

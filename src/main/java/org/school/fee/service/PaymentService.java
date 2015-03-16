@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.school.fee.models.PayResult;
 import org.school.fee.models.Payment;
 import org.springframework.data.domain.Page;
 
@@ -14,6 +15,9 @@ public interface PaymentService {
 	public void deletePayment(ObjectId id);
 	public void deletePayment(ObjectId[] ids);
 	public Payment getPayment(ObjectId id);
+	
+	public void pay(Payment payment,BigDecimal payMoney);
+	
 	public Page<Payment> listPayment(Integer page,Integer pageSize,String studentName,
 			String feeName,String klass,String school,Boolean notClear,Date startDate,
 			Date endDate,String orderBy,String order);

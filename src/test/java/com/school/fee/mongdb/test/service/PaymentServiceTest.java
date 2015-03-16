@@ -10,12 +10,15 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.school.fee.models.Payment;
 import org.school.fee.service.PaymentService;
+import org.school.fee.support.enums.InstalmentMethod;
+import org.school.fee.support.enums.PayMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,39 +66,26 @@ public class PaymentServiceTest {
 		payment.setFeeMoney(new BigDecimal(1000));
 		payment.setStudentId(new ObjectId());
 		payment.setStudentName("天天");
-		payment.pay(new BigDecimal(100));
-		payment.pay(new BigDecimal(200));
-		payment.pay(new BigDecimal(300));
 		payment.setSchool("補習班");
 		payment.setKlass("一班");
-		Calendar c = Calendar.getInstance();
-		now = c.getTime();
-		payment.setPayDate(now);
-		c.add(Calendar.DAY_OF_MONTH, 1);
-		c.set(c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH),0,0,0);
-		payment.setExpireDate(c.getTime());
+		payment.setExpireDayOfWeek(3);//周三
+		payment.setPayMethod(PayMethod.instalment.ordinal());
+		payment.setInstalmentMethod(InstalmentMethod.Week.ordinal());
+		payment.setInstalment(5);
+		paymentService.addPayment(payment);
 		
-		mongoTemplate.insert(payment);
 		payment = new Payment();
 		payment.setFeeId(new ObjectId());
 		payment.setFeeName("學雜費");
 		payment.setFeeMoney(new BigDecimal(100));
 		payment.setStudentId(new ObjectId());
 		payment.setStudentName("羊羊羊");
-		payment.pay(new BigDecimal(10));
-		payment.pay(new BigDecimal(20));
-		payment.pay(new BigDecimal(30));
 		payment.setSchool("幼兒園");
 		payment.setKlass("大班");
-		c = Calendar.getInstance();
-		payment.setPayDate(now);
-		c.add(Calendar.DAY_OF_MONTH, 2);
-		c.set(c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH),0,0,0);
-		payment.setExpireDate(c.getTime());
-		
-		mongoTemplate.insert(payment);
+		payment.setExpireDate(DateTime.now().plusDays(1).hourOfDay().setCopy(0).minuteOfHour().setCopy(0).secondOfMinute().setCopy(0).toDate());
+		payment.setPayMethod(PayMethod.onePay.ordinal());
+		paymentService.addPayment(payment);
 		long total = mongoTemplate.count(null,Payment.class);
-		
 		assertEquals(total, 2);
 	}
 	@After
@@ -104,26 +94,44 @@ public class PaymentServiceTest {
 	}
 	
 	@Test
-	public void testAddPayment(){
+	public void testAddOnePayPayment(){
 		Payment payment = new Payment();
 		payment.setFeeId(new ObjectId());
 		payment.setFeeName("學費");
 		payment.setFeeMoney(new BigDecimal(1000));
 		payment.setStudentId(new ObjectId());
 		payment.setStudentName("天天");
-		payment.pay(new BigDecimal(100));
-		payment.pay(new BigDecimal(200));
-		payment.pay(new BigDecimal(300));
 		payment.setSchool("補習班");
 		payment.setKlass("一班");
 		Calendar c = Calendar.getInstance();
-		payment.setPayDate(c.getTime());
 		c.add(Calendar.DAY_OF_MONTH, 3);
 		payment.setExpireDate(c.getTime());
+		payment.setPayMethod(PayMethod.onePay.ordinal());
 		paymentService.addPayment(payment);
 		long total = mongoTemplate.count(null,Payment.class);
 		assertEquals(total, 3);
 	}
+	
+	@Test
+	public void testPay(){
+		Payment payment = mongoTemplate.findOne(query(where("studentName").is("羊羊羊")), Payment.class);
+		paymentService.pay(payment, new BigDecimal(10));
+		paymentService.pay(payment, new BigDecimal(90));
+		assertEquals(payment.getMoney().size(), 2);
+		assertEquals(payment.getPayResults().size(), 1);
+		logger.debug("payment:{}",payment);
+		
+		Payment payment1 = mongoTemplate.findOne(query(where("studentName").is("天天")), Payment.class);
+		paymentService.pay(payment1, new BigDecimal(700));
+		paymentService.pay(payment1, new BigDecimal(200));
+		paymentService.pay(payment1, new BigDecimal(100));
+		logger.debug("payment:{}",payment1);
+		assertEquals(payment1.getMoney().size(), 3);
+		assertEquals(payment1.getPayResults().size(), 5);
+		
+	}
+	
+	
 	@Test
 	public void testDeletePayment(){
 		List<Payment> payments = mongoTemplate.findAll(Payment.class);
@@ -158,24 +166,20 @@ public class PaymentServiceTest {
 		
 		
 		assertEquals(payments.getNumberOfElements(),1);
-		Calendar c = Calendar.getInstance();
-		c.setTime(now);
-		c.add(Calendar.DAY_OF_MONTH, -2);
-		Date startDate = c.getTime();
-		c.add(Calendar.DAY_OF_MONTH, 2);
-		Date endDate = c.getTime();
+		Date startDate = DateTime.now().toDate();
+		Date endDate = DateTime.now().dayOfWeek().setCopy(3).plusWeeks(1).toDate();
 		payments = paymentService.listPayment(0, 10, "天天", "學費", "一班", "補習班", true, startDate, endDate, null, null);
 		assertEquals(payments.getNumberOfElements(),1);
 		logger.debug("listPayment result by all query:{}",payments.getContent());
 		
-		payments = paymentService.listPayment(0, 10, null, null, null, null, true, null, null, "expireDate","desc");
+		payments = paymentService.listPayment(0, 10, null, null, null, null, true, null, null, "createDate","desc");
 		assertEquals(payments.getNumberOfElements(),2);
 		assertEquals(payments.getContent().get(0).getStudentName(),"羊羊羊");
 		logger.debug("listPayment result with sort:{}",payments.getContent());
 		
-		payments = paymentService.listPayment(0, 1, null, null, null, null, true, null, null, "expireDate","desc");
+		payments = paymentService.listPayment(1, 1, null, null, null, null, true, null, null, "createDate","desc");
 		assertEquals(payments.getNumberOfElements(),1);
-		assertEquals(payments.getContent().get(0).getStudentName(),"羊羊羊");
+		assertEquals(payments.getContent().get(0).getStudentName(),"天天");
 		logger.debug("listPayment result with pagination:{}",payments.getContent());
 	}
 	
@@ -184,7 +188,7 @@ public class PaymentServiceTest {
 		List<Payment> testPayment = mongoTemplate.findAll(Payment.class);
 		Payment payment = testPayment.get(0);
 		logger.debug("test payment is:{}",payment);
-		Page<Payment> payments = paymentService.listPaymentFromStudent(0, 12,payment.getStudentId(), null, true, null, null,"expireDate", "asc");
+		Page<Payment> payments = paymentService.listPaymentFromStudent(0, 12,payment.getStudentId(), null, true, null, null,"createDate", "asc");
 		logger.debug("list payment by studentId with sort:{}",payments);
 		assertEquals(payments.getNumberOfElements(),1);
 		assertEquals(payments.getContent().get(0).getId(),payment.getId());
@@ -212,7 +216,6 @@ public class PaymentServiceTest {
 	@Test
 	public void testFindPaymentByExpireDate(){
 		Calendar c = Calendar.getInstance();
-		c.setTime(now);
 		c.add(Calendar.DAY_OF_MONTH, 2);
 		List<Payment> payments = paymentService.findNotClearPaymentByDate(c.getTime());
 		assertEquals(payments.size(),1);

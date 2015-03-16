@@ -15,15 +15,20 @@ import java.util.List;
 import java.util.Properties;
 
 import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.school.fee.dao.MessageDao;
 import org.school.fee.models.Message;
+import org.school.fee.models.PayResult;
 import org.school.fee.models.Payment;
-import org.school.fee.models.SinglePay;
+import org.school.fee.models.PayRecord;
 import org.school.fee.models.Student;
 import org.school.fee.repository.MessageRepository;
 import org.school.fee.service.MessageService;
+import org.school.fee.service.PaymentService;
 import org.school.fee.service.StudentService;
 import org.school.fee.service.UserService;
+import org.school.fee.support.enums.SMSPeriod;
 import org.school.fee.support.utils.PageUtils;
 import org.school.fee.support.utils.SMSUtils;
 import org.slf4j.Logger;
@@ -40,6 +45,8 @@ public class MessageServiceImpl implements MessageService{
 	StudentService studentService;
 	@Autowired
 	UserService userService;
+	@Autowired
+	PaymentService paymentService;
 	@Autowired
 	MessageRepository messageRepository;
 	@Autowired
@@ -63,9 +70,9 @@ public class MessageServiceImpl implements MessageService{
 	}
 	private BigDecimal getRestMoney(Payment payment){
 		BigDecimal totalMoney = payment.getFeeMoney();
-		List<SinglePay> moneys = payment.getMoney();
+		List<PayRecord> moneys = payment.getMoney();
 		BigDecimal payTotal = new BigDecimal(0);
-		for(SinglePay singlePay : moneys){
+		for(PayRecord singlePay : moneys){
 			payTotal = payTotal.add(singlePay.getMoney());
 		}
 		BigDecimal restMoney = totalMoney.subtract(payTotal);
@@ -109,9 +116,9 @@ public class MessageServiceImpl implements MessageService{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
 		String expireDate = sdf.format(payment.getExpireDate());
 		StringBuilder payRecord = new StringBuilder();
-		List<SinglePay> pays = payment.getMoney();
+		List<PayRecord> pays = payment.getMoney();
 		BigDecimal payTotal = new BigDecimal(0);
-		for(SinglePay singlePay:pays){
+		for(PayRecord singlePay:pays){
 			String singlePayDate = sdf.format(singlePay.getPayDate());
 			String singlePayMoney = singlePay.getMoney().setScale(1, RoundingMode.HALF_UP).toString();
 			payRecord.append("<span class='single_pay'><span class='font_red'>"+singlePayDate+"</font_red>缴费<span class='font_red'>"+singlePayMoney+"</span>元</span>");
@@ -127,6 +134,65 @@ public class MessageServiceImpl implements MessageService{
 		message.setUserId(userService.findAdmin().getId());
 		saveMessage(message);
 	}
+	private String generateOnePayNotice(String template,Student student,Payment payment){
+		PayResult payResult = payment.getPayResults().get(0);
+		if(!payResult.getHasNotified()){
+			payResult.setHasNotified(true);
+			paymentService.savePayment(payment);
+			String studentName = student.getName();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+			String expireDate = sdf.format(payResult.getExpireDate());
+			String total = payment.getFeeMoney().setScale(1, RoundingMode.HALF_UP).toString();
+			BigDecimal payTotal = payResult.getMoney();
+			String rest = payResult.getRestMoney().setScale(1, RoundingMode.HALF_UP).toString();
+			String totalToShow = payTotal.setScale(0, RoundingMode.HALF_UP).toString();
+			StringBuilder payRecord = new StringBuilder();
+			List<PayRecord> pays = payment.getMoney();
+			for(PayRecord singlePay:pays){
+				String singlePayDate = sdf.format(singlePay.getPayDate());
+				String singlePayMoney = singlePay.getMoney().setScale(1, RoundingMode.HALF_UP).toString();
+				payRecord.append("<span class='single_pay'><span class='font_red'>"+singlePayDate+"</font_red>缴费<span class='font_red'>"+singlePayMoney+"</span>元</span>");
+			}
+			return MessageFormat.format(template,studentName,payment.getFeeName(),expireDate,total,totalToShow,payRecord,rest);
+		}
+		return null;
+	}
+	private String generateInstalmentNotice(String template,Student student,Payment payment){
+		PayResult payResult = payment.getPayResults().get(payment.getPayResults().size() - 1);
+		Date lastSMSSendDate = payResult.getLastSMSSendDate();
+		DateTime today = DateTime.now().hourOfDay().setCopy(0).minuteOfHour().setCopy(0).secondOfMinute().setCopy(0);
+		if(lastSMSSendDate!=null){
+			DateTime lssd = new DateTime(lastSMSSendDate);
+			Boolean shouldSend = true;
+			switch(SMSPeriod.values()[payment.getSmsPeriod()]){
+				case day:
+				case week:
+				case month:
+			}
+		}
+		if(!payResult.getHasNotified()){
+			payResult.setHasNotified(true);
+			paymentService.savePayment(payment);
+			String studentName = student.getName();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+			String expireDate = sdf.format(payResult.getExpireDate());
+			String total = payment.getFeeMoney().setScale(1, RoundingMode.HALF_UP).toString();
+			BigDecimal payTotal = payResult.getMoney();
+			String rest = payResult.getRestMoney().setScale(1, RoundingMode.HALF_UP).toString();
+			String totalToShow = payTotal.setScale(0, RoundingMode.HALF_UP).toString();
+			StringBuilder payRecord = new StringBuilder();
+			List<PayRecord> pays = payment.getMoney();
+			for(PayRecord singlePay:pays){
+				String singlePayDate = sdf.format(singlePay.getPayDate());
+				String singlePayMoney = singlePay.getMoney().setScale(1, RoundingMode.HALF_UP).toString();
+				payRecord.append("<span class='single_pay'><span class='font_red'>"+singlePayDate+"</font_red>缴费<span class='font_red'>"+singlePayMoney+"</span>元</span>");
+			}
+			return MessageFormat.format(template,studentName,payment.getFeeName(),expireDate,total,totalToShow,payRecord,rest);
+		}
+		
+		return null;
+	}
+	
 	public void saveMessage(Message message){
 		messageRepository.insert(message);
 	}

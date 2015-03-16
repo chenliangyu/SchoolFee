@@ -3,7 +3,7 @@ package org.school.fee.models;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class SinglePay {
+public class PayRecord {
 	private Date payDate;
 	private BigDecimal money;
 	public Date getPayDate() {
@@ -17,6 +17,10 @@ public class SinglePay {
 	}
 	public void setMoney(BigDecimal money) {
 		this.money = money;
+	}
+	@Override
+	public String toString() {
+		return "PayRecord [payDate=" + payDate + ", money=" + money + "]";
 	}
 	
 }
