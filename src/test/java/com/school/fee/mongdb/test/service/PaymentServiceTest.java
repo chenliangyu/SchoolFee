@@ -218,7 +218,7 @@ public class PaymentServiceTest {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.DAY_OF_MONTH, 2);
 		List<Payment> payments = paymentService.findNotClearPaymentByDate(c.getTime());
-		assertEquals(payments.size(),1);
+		assertEquals(payments.size(),2);
 		assertEquals(payments.get(0).getStudentName(),"天天");
 	}
 }
