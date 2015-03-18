@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 
 
 
+
+import org.apache.shiro.util.StringUtils;
 import org.school.fee.dao.StudentDao;
 import org.school.fee.models.Student;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,7 @@ public class StudentDaoImpl implements StudentDao{
 			}
 			query.addCriteria(new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()])));
 		}
-		if(keyword!=null){
+		if(keyword!=null&& !keyword.equals("")){
 			Pattern pattern = Pattern.compile("^.*"+keyword+".*$");
 			List<Criteria> criterias = new ArrayList<Criteria>();
 			criterias.add(Criteria.where("name").regex(pattern));

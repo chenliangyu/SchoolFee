@@ -344,6 +344,10 @@ $(function() {
         })
     }
     if (jQuery().datepicker) {
+    	var today = new Date();
+    	var dateString = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
+    	$("input.date-picker").attr("value",dateString);
+    	$("div.date-picker").attr("data-date",dateString);
         $(".date-picker").datepicker()
     }
     if (jQuery().daterangepicker) {
@@ -1347,7 +1351,7 @@ $(function() {
 			dataType : "json"
 		}).done(function(data){
 			if(data && data.result && data.result.code === "success"){
-				var count = parserInt(data.result.data);
+				var count = parseInt(data.result.data);
 				count && $(".message_count").html(data.result.data);
 			}
 		});

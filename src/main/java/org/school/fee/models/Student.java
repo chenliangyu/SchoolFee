@@ -75,4 +75,11 @@ public class Student implements Serializable{
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	@Override
+	public String toString() {
+		return "Student [id=" + id + ", name=" + name + ", sex=" + sex
+				+ ", age=" + age + ", fatherName=" + fatherName
+				+ ", motherName=" + motherName + ", klass=" + klass
+				+ ", school=" + school + ", phone=" + phone + "]";
+	}
 }
