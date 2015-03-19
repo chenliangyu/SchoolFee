@@ -9,7 +9,7 @@
             </div>
             <div class="box-content">
                 <form action="${ctx}/action/payment/add" method="post" class="form-horizontal form-row-separated add_form">
-                	<input type='hidden' name="id" value="${result.student.id}" />
+                	<input type='hidden' name="studentId" value="${result.student.id}" />
                     <div class="control-group">
                         <label for="name" class="control-label">姓名</label>
                         <div class="controls">
@@ -21,7 +21,7 @@
                         <div class="controls">
                         	<#if result.feeList?? && (result.feeList?size>0)>
                             <select class="span6" name="feeId" data-placeholder="Choose a Category" tabindex="1">
-                                <option value="">Select...</option>
+                                <option>Select...</option>
                                 <#list result.feeList as fee>
                                 <option value='${fee.id}'>${fee.name}:${fee.money}</option>
                                 </#list>
@@ -59,7 +59,7 @@
                         <label for="fatherName" class="control-label">过期时间</label>
                         <div class="controls">
                             <div class="input-append date date-picker" data-date-format="yyyy-m-d">
-                                <input class="date-picker" data-date-format="yyyy-m-d" size="16" type="text"><span class="add-on"><i class="icon-calendar"></i></span>
+                                <input class="date-picker" name='expireDate' data-date-format="yyyy-m-d" size="16" type="text"><span class="add-on"><i class="icon-calendar"></i></span>
                              </div>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                         <label class="control-label">过期后是否发送短信</label>
                         <div class="controls">
 							<div class="switch has-switch add_sendsms" data-on="primary" data-off="info">
-                                <input name="sendMessage" id="sendMessage" type="checkbox">
+                                <input name="sendMessage" id="sendMessage" type="checkbox" value="true">
                             </div>
                         </div>
                     </div>
@@ -81,18 +81,18 @@
                         <label for="phone" class="control-label">过期后是否发送消息通知</label>
                         <div class="controls">
                             <div class="switch has-switch" data-on="primary" data-off="info">
-                                <input name="sendNotify" id="sendNotify" type="checkbox" checked>
+                                <input name="sendNotify" id="sendNotify" type="checkbox" value="true" checked>
                             </div>
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="phone" class="control-label">金额</label>
                         <div class="controls">
-                            <input class="input-medium" name='money' type="text">
+                            <input class="input-medium" name='payMoney' type="text">
                         </div>
                     </div>
                     <div class="form-actions">
-                       <button type="submit" class="btn btn-primary"><i class="icon-ok"></i> 保存</button>
+                       <button type="submit" class="btn btn-primary add_payment"><i class="icon-ok"></i> 保存</button>
                        <button type="reset" class="btn">重置</button>
                     </div>
                  </form>

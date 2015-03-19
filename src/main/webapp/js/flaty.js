@@ -346,8 +346,12 @@ $(function() {
     if (jQuery().datepicker) {
     	var today = new Date();
     	var dateString = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
-    	$("input.date-picker").attr("value",dateString);
-    	$("div.date-picker").attr("data-date",dateString);
+    	if(!$("input.date-picker").prop("value")){
+    		$("input.date-picker").attr("value",dateString);
+    	}
+    	if(!$("div.date-picker").attr("data-date")){
+    		$("div.date-picker").attr("data-date",dateString);
+    	}
         $(".date-picker").datepicker()
     }
     if (jQuery().daterangepicker) {

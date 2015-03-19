@@ -31,19 +31,19 @@
         <li>
             <a href="#" class="dropdown-toggle">
                 <i class="icon-edit"></i>
-                <span>费用查询</span>
+                <span>费用记录</span>
                 <b class="arrow icon-angle-right"></b>
             </a>
 
             <!-- BEGIN Submenu -->
             <ul class="submenu">
-                <li><a href="add_fee.html">缴费</a></li>
-                <li><a href="query_fee.html">查询</a></li>
+                <li><a href="${ctx}/action/payment/">缴费及记录</a></li>
+                <li><a href="${ctx}/action/fee/">费用管理</a></li>
             </ul>
             <!-- END Submenu -->
         </li>
         <li>
-            <a href="message.html" class="dropdown-toggle">
+            <a href="${ctx}/action/message/index" class="dropdown-toggle">
                 <i class="icon-edit"></i>
                 <span>消息通知</span>
             </a>

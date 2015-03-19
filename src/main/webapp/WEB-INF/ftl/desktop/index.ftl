@@ -34,52 +34,7 @@
                     </ul>
                 </div>
                 <!-- END Breadcrumb -->
-				 <div id="modal-2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
-				 <form action="${ctx}/action/student/" method="post" class="form-horizontal form-row-separated search_form">
-			        <div class="modal-header">
-			            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			            <h3 id="myModalLabel1">搜索选项</h3>
-			        </div>
-			        <div class="modal-body">
-                        <div class="control-group">
-                            <label for="keyword" class="control-label">关键词</label>
-                            <div class="controls">
-                                <input type="text" name="keyword" id="keyword" placeholder="姓名/班级/学校/父亲名/母亲名的关键字" value='${result.student.name}' class="input-large">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label for="ageStart" class="control-label">最小年龄</label>
-                            <div class="controls">
-                                <input type="text" name="ageStart" id="ageStart" placeholder="搜索年龄大于改值的学生" class="input-mini" value='${result.student.age}'>岁
-                            </div>
-                        </div>
-                        <div class="control-group">
-                           <label for="ageEnd" class="control-label">最大年龄</label>
-                           <div class="controls">
-                              <input type="text" name="ageEnd" id="ageEnd" placeholder="搜索年龄小于改值的学生" class="input-mini" value='${result.student.age}'>岁  
-                           </div>
-                        </div>
-                        <div class="control-group">
-                              <label class="control-label">性别</label>
-                               <div class="controls">
-                               	  <label class="radio inline">
-                                      <input type="radio" value="0" /> 随便
-                                  </label>
-                                  <label class="radio inline">
-                                      <input type="radio" name="sex" value="0" /> 男孩
-                                  </label>
-                                  <label class="radio inline">
-                                      <input type="radio" name="sex" value="1" /> 女孩
-                                  </label>  
-                               </div>
-                        </div>
-			        </div>
-			        <div class="modal-footer">
-			            <button class="btn" data-dismiss="modal" aria-hidden="true">返回</button>
-			            <button type="submit" class="btn btn-primary">搜索</button>
-			        </div>
-			      </form>
-			    </div>
+                <#include "desktop/search.ftl">
                 <!-- BEGIN Main Content -->
                 <div class="row-fluid">
                     <div class="span12">
@@ -91,11 +46,28 @@
                                 </div>
                             </div>
                             <div class="box-content">
-                                <div class="btn-toolbar">
+                                <div class="btn-toolbar pull-right clearfix">
                                     <a href='${ctx}/action/student/add' class="btn btn-primary"><i class="icon-cog"></i> 添加学生</a>
                                     <a href="#modal-2" role="button" class="btn btn-info" data-toggle="modal"><i class="icon-cog"></i> 搜索</a>
                                     <button class="btn btn-danger delete_student"><i class="icon-cog"></i> 删除</button>
                                 </div>
+                                <#if result.hasFilter?? && result.hasFilter>
+	                            	<div style='margin:10px 0'>
+	                            		<span>当前搜索选项</span>:
+	                            		<#if result.filter.keyword??>
+	                            			<span class="label label-info">关键词：${result.filter.keyword}</span>
+	                            		</#if>
+	                            		<#if result.filter.ageStart??>
+	                            			<span class="label label-info">年龄大于：${result.filter.ageStart?string.number}</span>
+	                            		</#if>
+	                            		<#if result.filter.ageEnd??>
+	                            			<span class="label label-info">年龄小于：${result.filter.ageEnd?string.number}</span>
+	                            		</#if>
+	                            		<#if result.filter.sex??>
+	                            			<span class="label label-info">性别：<#if result.filter.sex==0>男<#else>女</#if></span>
+	                            		</#if>
+	                            	</div>
+                            	</#if>
                                 <form action="${ctx}/action/student/delete" method="post" class='delete_form'>
                                 <table class="table table-striped table-hover fill-head">
                                     <thead>
@@ -113,8 +85,8 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <#if result??>
-                                    	<#list result.content as data>
+                                    <#if result.students??>
+                                    	<#list result.students.content as data>
                                     		<tr>
 		                                        <td><input type="checkbox" name="ids" value="${data.id}" class='student_id' /></td>
 		                                        <td>${data.name}</td>
@@ -169,7 +141,7 @@
                                 </table>
                                 </form>
                                 <#if result??>
-	                                <@pagination page=result url=ctx+"/action/student" />
+	                                <@pagination page=result.students url=ctx+"/action/student" />
 	                                    <!--<li><a href="#">← 上一页</a></li>
 	                                    <li><a href="#">1</a></li>
 	                                    <li><a href="#">2</a></li>

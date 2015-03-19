@@ -61,11 +61,30 @@ public class StudentController extends AbstractController {
 	
 	@RequestMapping("/{pageNo}")
 	public ModelAndView index(@PathVariable Integer pageNo,Integer pageSize,String keyword,Integer ageStart,Integer ageEnd,Integer sex,String orderBy,String order){
+		Map<String,Object> filter = new HashMap<String, Object>();
+		Map<String,Object> result = new HashMap<String, Object>();
+		if(keyword!=null && !keyword.equals("")){
+			filter.put("keyword", keyword);
+		}
+		if(ageStart!=null){
+			filter.put("ageStart", ageStart);
+		}
+		if(ageEnd!=null){
+			filter.put("ageStart", ageEnd);
+		}
+		if(sex!=null){
+			filter.put("sex", sex);
+		}
+		if(filter.keySet().size()!=0){
+			result.put("hasFilter", true);
+			result.put("filter", filter);
+		}
 		logger.debug("url:{}","/action/student/"+pageNo);
 		logger.debug("pageSize:{},keyword:{},ageStart:{},ageEnd:{},sex:{},orderBy:{},order:{}",
 				new Object[]{pageSize,keyword,ageStart,ageEnd,sex,orderBy,order});
 		Page<Student> students = studentService.getStudent(pageNo,pageSize,keyword, sex, ageStart, ageEnd, orderBy, order);
-		return new ModelAndView("/desktop/index").addObject("result", students);
+		result.put("students", students);
+		return new ModelAndView("/desktop/index").addObject("result", result);
 	}
 	
 	@RequestMapping("/add")

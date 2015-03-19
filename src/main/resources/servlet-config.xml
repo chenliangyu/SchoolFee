@@ -12,7 +12,17 @@
 			        	
 	<!-- 扫描@Controller注解的类 -->
 	<context:component-scan base-package="org.school.fee.controller" />
-	<mvc:annotation-driven />
+	<mvc:annotation-driven conversion-service="conversionService"/>
+	<bean id="conversionService"
+      class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <bean id="stringToDateConveter" class="org.school.fee.support.utils.StringToDateConverter">
+					<property name="format" value="yyyy-MM-dd" />
+				</bean>
+            </list>
+        </property>
+    </bean>
 	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 	    <property name="favorPathExtension" value="true"/>
 	    <property name="mediaTypes">
@@ -59,7 +69,7 @@
             <props>
                 <prop key="template_update_delay">0</prop>
                 <prop key="default_encoding">UTF-8</prop>
-                <prop key="number_format">###.0</prop>
+                <prop key="number_format">###.#</prop>
                 <prop key="datetime_format">yyyy年MM月dd日 HH:mm:ss</prop>
                 <prop key="classic_compatible">true</prop>
             </props>

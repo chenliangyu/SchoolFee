@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.school.fee.support.enums.PayMethod;
+import org.school.fee.support.enums.PayStatus;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -170,6 +172,9 @@ public class Payment implements Serializable{
 		this.instalmentMethod = instalmentMethod;
 	}
 	public BigDecimal getInstalmentMoney(){
+		if(getPayMethod() == PayMethod.onePay.ordinal()){
+			return BigDecimal.ZERO;
+		}
 		return getFeeMoney().divide(new BigDecimal(getInstalment()));
 	}
 	public BigDecimal getPayTotal(){
@@ -181,6 +186,24 @@ public class Payment implements Serializable{
 			}
 		}
 		return total;
+	}
+	public Integer getRestInstalment(){
+		int total = getInstalment();
+		int hasPay = getPayResults().size();
+		int notPay = total - hasPay;
+		for(int i=hasPay-1;i>=0;i--){
+			if(getPayResults().get(i).getStatus() == PayStatus.notClear.ordinal()){
+				notPay++;
+			}
+		}
+		return notPay;
+	}
+	public BigDecimal getNextNeedPay(){
+		if(getPayMethod() == PayMethod.onePay.ordinal()){
+			return BigDecimal.ZERO;
+		}
+		PayResult payResult = getPayResults().get(getPayResults().size() - 1);
+		return payResult.getRestMoney();
 	}
 	public int getSmsInterval() {
 		return smsInterval;

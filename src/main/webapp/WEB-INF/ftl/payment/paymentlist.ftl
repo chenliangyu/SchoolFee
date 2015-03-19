@@ -2,18 +2,43 @@
     <div class="span12">
         <div class="box">
             <div class="box-title">
-                <h3><i class="icon-table"></i>缴费记录</h3>
+                <h3><i class="icon-table"></i><#if result.student??>${result.student.name}的</#if>缴费记录</h3>
                 <div class="box-tool">
                     <a data-action="collapse" href="#"><i class="icon-chevron-up"></i></a>
                 </div>
             </div>
             <div class="box-content">
-                <div class="btn-toolbar">
+                <div class="btn-toolbar pull-right clearfix">
                     <a href="#modal-2" role="button" class="btn btn-info" data-toggle="modal"><i class="icon-cog"></i> 搜索</a>
-                    <button class="btn btn-danger delete_student"><i class="icon-cog"></i> 删除</button>
+                    <button class="btn btn-danger delete_payment"><i class="icon-cog"></i> 删除</button>
                 </div>
-                <form action="${ctx}/action/payment/delete" method="post" class='delete_form'>
-                <table class="table table-striped table-hover fill-head">
+                <#if result.hasFilter?? && result.hasFilter>
+	                <div style="margin:10px 0">
+	                	<span>当前搜索选项：</span>
+	                	<#if result.filter.feeName??>
+	                		<span class='label label-info'>费用名：${result.filter.feeName}</span>
+	                	</#if>
+	                	<#if result.filter.studentName??>
+	                		<span class='label label-info'>学生姓名：${result.filter.studentName}</span>
+	                	</#if>
+	                	<#if result.filter.klass??>
+	                		<span class='label label-info'>班级：${result.filter.klass}</span>
+	                	</#if>
+	                	<#if result.filter.school??>
+	                		<span class='label label-info'>学校：${result.filter.school}</span>
+	                	</#if>
+	                	<#if result.filter.startDate??>
+	                		<span class='label label-info'>过期时间晚于：${result.filter.startDate?string("yyyy年MM月dd日")}</span>
+	                	</#if>
+	                	<#if result.filter.endDate??>
+	                		<span class='label label-info'>过期时间早于：${result.filter.endDate?string("yyyy年MM月dd日")}</span>
+	                	</#if>
+	                	<#if result.filter.notClear??>
+	                		<span class='label label-info'><#if result.filter.notClear>未结清<#else>已结清</#if></span>
+	                	</#if>
+	                </div>
+                </#if>
+                <table class="table table-striped table-hover fill-head payment_list">
                     <thead>
                     <tr>
                         <th style="width: 18px"><input type="checkbox" /></th>
@@ -28,6 +53,7 @@
                         <th>缴费类型</th>
                         <th>缴纳状态</th>
                         <th>缴纳记录</th>
+                        <th>创建时间</th>
                         <th style="width: 250px">操作</th>
                     </tr>
                     </thead>
@@ -44,79 +70,54 @@
                                 <#if !result.feeId??>
                                 <td>${data.feeName}</td>
                                 </#if>
-                                <td><#if (data.payMethod == 0)>一次付清<#else>分期</#if></td>
+                                <td><#if (data.payMethod == 0)>一次付清<#else>分期:共${data.instalment}期</#if></td>
                                 <td>
+                                	<ul class='unstyled'>
+                                	<li>
+                                		共需缴纳<span class='text-error'>${data.feeMoney}</span>元,已缴<span class='text-error'>${data.payTotal}</span>元,
+                                		<#if (data.feeMoney <= data.payTotal)>
+                                			已结清
+                                		<#else>
+	                                		<#if data.payMethod==1>
+	                                			下期需缴<span class='text-error'>${data.nextNeedPay}</span>元,剩余${data.restInstalment}期未结清
+	                                		</#if>
+                                		</#if>
+                                	</li>
                                 	<#list data.payResults as payResult>
                                 		<#if (data.payMethod == 0)>
-                                			<span class='payment_result'>
-                                				应缴金额：${payResult.payMoney},实缴金额：${payResult.money},<#if (payResult.status==0)>已结清<#else>剩余${payResult.restMoney}未结清</#if>
-                                			</span>
+                                			<li class='payment_result'>
+                                				<i class='<#if payResult.status==0>icon-ok green<#else>icon-remove red</#if>'></i> 应缴金额：<span class='text-error'>${payResult.payMoney}</span>,实缴金额：<span class='text-error'>${payResult.money}</span>,<#if (payResult.status==0)>已结清<#else>剩余<span class='text-error'>${payResult.restMoney}</span>未结清</#if>
+                                			</li>
                                 		<#else>
-                                			<span class='payment_result'>
-                                				第${payResult_index}期应缴金额：${payResult.payMoney},实缴金额：${payResult.money},<#if (payResult.status==0)>已结清<#else>剩余${payResult.restMoney}未结清</#if>
-                                			</span>
+                                			<li class='payment_result'>
+                                				<i class='<#if payResult.status==0>icon-ok green<#else>icon-remove red</#if>'></i> 第${(payResult_index+1)?string.number}期应缴金额：<span class='text-error'>${payResult.payMoney}</span>,实缴金额：<span class='text-error'>${payResult.money}</span>,<#if (payResult.status==0)>已结清<#else>剩余<span class='text-error'>${payResult.restMoney}</span>未结清,将于${payResult.expireDate?string("yyyy年MM月dd日")}到期</#if>
+                                			</li>
                                 		</#if>
                                 	</#list>
+                                	</ul>
                                 </td>
                                 <td>
+                                	<ul class="unstyled">
                                 	<#list data.money as payRecord>
-                                		<span class='payment_record'>
-                                			${payRecord.payDate?date}缴纳${payRecord.money}元
-                                		</span>
+                                		<li class='payment_record'>
+                                			${payRecord.payDate?string("yyyy年MM月dd日")}缴纳<span class='text-error'>${payRecord.money}</span>元
+                                		</li>
                                 	</#list>
+                                	</ul>
                                 </td>
+                                <td>${data.createDate?string("yyyy年MM月dd日")}</td>
                                 <td>
-                                    <a href="#modal-3" role="button" class="btn btn-info" data-toggle="modal"><i class="icon-cog"></i> 缴费</a>
-                                    <a class="btn btn-danger btn-small"  href="${ctx}/action/student/delete/${data.id}"><i class="icon-trash"></i>删除</a>
+                                    <a href="#modal-3" role="button" data-id="${data.id}" class="btn btn-info btn-small pay_button" data-toggle="modal"><i class="icon-cog"></i> 缴费</a>
+                                    <a class="btn btn-danger btn-small delete_button" data-id="${data.id}"  href="#"><i class="icon-trash"></i>删除</a>
                                 </td>
                             </tr>
                     	</#list>
                     </#if>
-                    
-                    <!--<tr>
-                        <td><input type="checkbox" value="1" /></td>
-                        <td>Mark</td>
-                        <td>Otto<span class="label label-info pull-right"><i class="icon-twitter"></i> New Twitte</span></td>
-                        <td>@mdo<span class="badge badge-info pull-right">+10</span></td>
-                        <td>
-                            <a class="btn btn-primary btn-small"  href="#"><i class="icon-edit"></i> 编辑</a>
-                            <a class="btn btn-danger btn-small"  href="#"><i class="icon-trash"></i> 删除</a>
-                            <a class="btn btn-danger btn-small"  href="#"><i class="icon-trash"></i> 缴费</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" value="2" /></td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>
-                            <a class="btn btn-primary btn-small" href="#"><i class="icon-edit"></i> 编辑</a>
-                            <a class="btn btn-danger btn-small" href="#"><i class="icon-trash"></i> 删除</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" value="3" /></td>
-                        <td>Larry <span class="label label-success label-small pull-right">New User</span></td>
-                        <td>the Bird</td>
-                        <td><a href="#">@twitter</a></td>
-                        <td>
-                            <a class="btn btn-primary btn-small" href="#"><i class="icon-edit"></i> 编辑</a>
-                            <a class="btn btn-danger btn-small"  href="#"><i class="icon-trash"></i> 删除</a>
-                        </td>
-                    </tr>-->
                     </tbody>
                 </table>
                 </form>
                 <#if result??>
                     <@pagination page=result.payments url=url />
-                        <!--<li><a href="#">← 上一页</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li class="active"><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">6</a></li>
-                        <li><a href="#">下一页 → </a></li>-->
                 </#if>
             </div>
         </div>

@@ -91,8 +91,8 @@ public class StudentServiceTest extends AbstractJUnit4SpringContextTests{
 		students = studentService.getStudent(0,20,null,null,7, 10,null,null);
 		assertEquals(2,students.getNumberOfElements());
 		
-		students = studentService.getStudent(0,20,null,null,7, null,null,null);
-		assertEquals(2,students.getNumberOfElements());
+		students = studentService.getStudent(0,20,"天天",null,7, null,null,null);
+		assertEquals(1,students.getNumberOfElements());
 	}
 	
 	@Test

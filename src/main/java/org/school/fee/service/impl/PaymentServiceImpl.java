@@ -125,12 +125,13 @@ public class PaymentServiceImpl implements PaymentService{
 				if(total.compareTo(payResult.getPayMoney())>=0 && payResult.getStatus()!=PayStatus.clear.ordinal()){
 					payResult.setStatus(PayStatus.clear.ordinal());
 					payResult.setMoney(payResult.getPayMoney());
-				}else{
+				}else if(payResult.getStatus()!=PayStatus.clear.ordinal()){
 					payResult.setMoney(total);
 				}
 				total = total.subtract(payResult.getPayMoney());
 			}
-			while(total.compareTo(BigDecimal.ZERO)>0){
+			int i = payResults.size();
+			while(total.compareTo(BigDecimal.ZERO)>=0 && i<payment.getInstalment()) {
 				PayResult payResult = new PayResult();
 				payResult.setExpireDate(PayUtils.getNextExpireDate(payment));
 				BigDecimal instalmentMoney = payment.getInstalmentMoney();
@@ -144,6 +145,7 @@ public class PaymentServiceImpl implements PaymentService{
 				}
 				payment.getPayResults().add(payResult);
 				total = total.subtract(instalmentMoney);
+				i++;
 			}
 		}
 		savePayment(payment);

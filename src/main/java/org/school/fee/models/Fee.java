@@ -1,11 +1,15 @@
 package org.school.fee.models;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.bson.types.ObjectId;
+import org.school.fee.support.utils.ObjectIdSerializable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Document
 public class Fee implements Serializable {
@@ -15,9 +19,10 @@ public class Fee implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
+	@JsonSerialize(using = ObjectIdSerializable.class)  
 	private ObjectId id;
 	private String name;
-	private Double money;
+	private BigDecimal money;
 	
 	public ObjectId getId() {
 		return id;
@@ -31,10 +36,10 @@ public class Fee implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Double getMoney() {
+	public BigDecimal getMoney() {
 		return money;
 	}
-	public void setMoney(Double money) {
+	public void setMoney(BigDecimal money) {
 		this.money = money;
 	}
 	@Override

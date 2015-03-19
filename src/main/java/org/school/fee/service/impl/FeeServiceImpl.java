@@ -49,6 +49,11 @@ public class FeeServiceImpl implements FeeService {
 			deleteFee(id);
 		}
 	}
+
+	public Fee getFee(ObjectId id) {
+		// TODO Auto-generated method stub
+		return feeRepository.findOne(id);
+	}
 	
 	
 }

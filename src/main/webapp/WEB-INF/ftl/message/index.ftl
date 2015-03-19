@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 	<#include "common/html.ftl">
     <head>
-		<#assign title="费用记录">
+		<#assign title="消息通知">
 		<#assign description="">
     	<#include "common/meta.ftl">
     	<link rel="stylesheet" type="text/css" href="${ctx}/assets/bootstrap-datepicker/css/datepicker.css">
@@ -41,8 +41,8 @@
                 <!-- BEGIN Page Title -->
                 <div class="page-title">
                     <div>
-                        <h1><i class="icon-file-alt"></i>缴费记录</h1>
-                        <h4>看看你学生的缴费情况吧，如果是继续缴费，记得点列表中的缴费</h4>
+                        <h1><i class="icon-file-alt"></i>消息通知</h1>
+                        <h4>到了过期时间还没有缴费的都会在这里告诉你哦</h4>
                     </div>
                 </div>
                 <!-- END Page Title -->
@@ -54,17 +54,12 @@
                             <a href="index.html">学生管理</a>
                             <span class="divider"><i class="icon-angle-right"></i></span>
                         </li>
-                        <li class="active">缴费记录</li>
+                        <li class="active">消息通知</li>
                     </ul>
                 </div>
                 <!-- END Breadcrumb -->
-                <#include "payment/search.ftl" />
-                <#include "payment/payform.ftl" />
                 <!-- BEGIN Main Content -->
-                   <#if result.student??>
-                   		<#include "payment/addpayment.ftl" />
-                   </#if>
-                   <#include "payment/paymentlist.ftl" />
+                   <#include "message/msglist.ftl" />
                 <!-- END Main Content -->
                 <footer>
                     <p>2013 © FLATY Admin Template.</p>

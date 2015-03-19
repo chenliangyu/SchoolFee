@@ -21,7 +21,7 @@
             <ul class="nav flaty-nav pull-right">
                 <!-- BEGIN Button Messages -->
                 <li class="hidden-phone">
-                    <a href="${ctx}/action/message/index">
+                    <a href="${ctx}/action/message/index/">
                         <i class="icon-envelope"></i>
                         <span class="badge badge-success message_count"></span>
                     </a>
@@ -45,7 +45,7 @@
                         </li>
                         <li class="divider visible-phone"></li>
                         <li class="visible-phone">
-                            <a href="/message.html">
+                            <a href="${ctx}/action/message/index">
                                 <i class="icon-envelope"></i>
                                 消息
                                 <span class="badge badge-success message_count"></span>

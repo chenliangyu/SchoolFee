@@ -2,6 +2,7 @@ package com.school.fee.mongdb.test.service;
 
 import static org.junit.Assert.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.After;
@@ -32,7 +33,7 @@ public class FeeServiceTest {
 	@Test
 	public void testAddFee(){
 		Fee fee = new Fee();
-		fee.setMoney(1000.10);
+		fee.setMoney(new BigDecimal(1000.10));
 		fee.setName("学费");
 		feeService.insertFee(fee);
 		assertNotNull(fee.getId());
@@ -44,15 +45,15 @@ public class FeeServiceTest {
 	@Before
 	public void InsertData(){
 		Fee fee = new Fee();
-		fee.setMoney(1000.10);
+		fee.setMoney(new BigDecimal(1000.10));
 		fee.setName("学费");
 		feeService.insertFee(fee);
 		fee = new Fee();
-		fee.setMoney(1002.20);
+		fee.setMoney(new BigDecimal(1002.20));
 		fee.setName("学杂费");
 		feeService.insertFee(fee);
 		fee = new Fee();
-		fee.setMoney(2003.20);
+		fee.setMoney(new BigDecimal(2003.20));
 		fee.setName("生活费");
 		feeService.insertFee(fee);
 		assertEquals(3,mongoTemplate.findAll(Fee.class).size());

@@ -31,6 +31,7 @@ public class StudentDaoImpl implements StudentDao{
 
 	private Query createFindQuery(String keyword,Integer sex, Integer ageStart, Integer ageEnd){
 		Query query = new Query();
+		List<Criteria> andCriterias = new ArrayList<Criteria>();
 		if(ageStart!=null || ageEnd!=null){
 			List<Criteria> criterias = new ArrayList<Criteria>();
 			if(ageStart!=null){
@@ -39,7 +40,7 @@ public class StudentDaoImpl implements StudentDao{
 			if(ageEnd != null){
 				criterias.add(Criteria.where("age").lte(ageEnd));
 			}
-			query.addCriteria(new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()])));
+			andCriterias.add((new Criteria()).andOperator(criterias.toArray(new Criteria[criterias.size()])));
 		}
 		if(keyword!=null&& !keyword.equals("")){
 			Pattern pattern = Pattern.compile("^.*"+keyword+".*$");
@@ -50,10 +51,13 @@ public class StudentDaoImpl implements StudentDao{
 			criterias.add(Criteria.where("klass").regex(pattern));
 			criterias.add(Criteria.where("school").regex(pattern));
 			criterias.add(Criteria.where("phone").regex(pattern));
-			query.addCriteria(new Criteria().orOperator(criterias.toArray(new Criteria[criterias.size()])));
+			andCriterias.add((new Criteria()).orOperator(criterias.toArray(new Criteria[criterias.size()])));
 		}
 		if(sex!=null){
-			query.addCriteria(Criteria.where("sex").is(sex));
+			andCriterias.add(Criteria.where("sex").is(sex));
+		}
+		if(andCriterias.size()>0){
+			query.addCriteria((new Criteria()).andOperator(andCriterias.toArray(new Criteria[andCriterias.size()])));
 		}
 		return query;
 	}

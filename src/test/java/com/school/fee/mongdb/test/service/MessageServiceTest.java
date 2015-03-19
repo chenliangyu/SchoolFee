@@ -154,6 +154,13 @@ public class MessageServiceTest {
 		mongoTemplate.dropCollection(Payment.class);
 	}
 	
+	//@Test
+	public void testSend() throws IOException{
+		for(int i = 0,l = 20;i<l;i++){
+			testSendNotify();
+		}
+	}
+	
 	@org.junit.Before
 	public void insertData(){
 		user = userService.findAdmin();
