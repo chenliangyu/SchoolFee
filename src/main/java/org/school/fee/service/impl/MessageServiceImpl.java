@@ -155,7 +155,7 @@ public class MessageServiceImpl implements MessageService{
 	public void saveMessage(Message message){
 		messageRepository.insert(message);
 	}
-	public void sendSMS(Student student,Payment payment) {
+	public void sendSMS(Student student,Payment payment) throws IOException {
 		String template = getSMSTemplate();
 		String smsContent;
 		if(payment.getPayMethod() == PayMethod.onePay.ordinal()){

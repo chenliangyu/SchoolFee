@@ -91,10 +91,10 @@ public class MessageServiceTest {
 	}
 	
 	@Test
-	public void testSendSMS(){
+	public void testSendSMS() throws IOException{
 		Student student = new Student();
 		student.setName("多多");
-		student.setPhone("12345678912");
+		student.setPhone("18520879240");
 		studentService.insertStudent(student);
 		Payment payment = new Payment();
 		payment.setFeeId(new ObjectId());

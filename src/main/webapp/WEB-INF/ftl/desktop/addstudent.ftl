@@ -109,7 +109,6 @@
                                     </div>
                                     <div class="form-actions">
                                        <button type="submit" class="btn btn-primary"><i class="icon-ok"></i> 保存</button>
-                                       <button type="reset" class="btn">重置</button>
                                     </div>
                                  </form>
                             </div>
@@ -147,7 +146,6 @@
     			}
     		}else if(isModify === "true"){
     			alert("修改成功");
-    			history.go(-2);
     		}
     	</script>
     </body>

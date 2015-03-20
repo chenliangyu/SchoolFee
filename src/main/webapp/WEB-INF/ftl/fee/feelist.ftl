@@ -9,8 +9,8 @@
             </div>
             <div class="box-content">
                 <div class="btn-toolbar pull-right clearfix">
-                    <a href="#modal-2" role="button" class="btn btn-primary" data-toggle="modal"><i class="icon-cog"></i> 搜索</a>
-                    <button class="btn btn-danger delete_fee"><i class="icon-cog"></i> 删除</button>
+                    <a href="#modal-2" role="button" class="btn btn-info" data-toggle="modal"><i class="icon-search"></i> 搜索</a>
+                    <button class="btn btn-danger delete_fee"><i class="icon-trash"></i> 删除</button>
                 </div>
                 <div style="margin:10px 0">
 	                <#if result.data.name??>
@@ -35,9 +35,9 @@
                                 <td>${data.name}</td>
                                 <td>${data.money}</td>
                                 <td>
-                                    <a class="btn btn-primary btn-small edit_button"  href="#" data-id="${data.id}"><i class="icon-edit"></i> 编辑</a>
+                                	<a class="btn btn-primary btn-small"  href="${ctx}/action/payment/fee/${data.id}/0"><i class="icon-reorder"></i> 缴费记录</a>
+                                    <a class="btn btn-info btn-small edit_button"  href="#" data-id="${data.id}"><i class="icon-edit"></i> 编辑</a>
                                     <a class="btn btn-danger btn-small delete_button"  href="#" data-id="${data.id}"><i class="icon-trash"></i> 删除</a>
-                                    <a class="btn btn-danger btn-small"  href="${ctx}/action/payment/fee/${data.id}/0"><i class="icon-trash"></i> 查看缴费记录</a>
                                 </td>
                             </tr>
                     	</#list>

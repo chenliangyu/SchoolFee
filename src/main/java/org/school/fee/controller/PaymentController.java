@@ -129,6 +129,7 @@ public class PaymentController extends AbstractController {
 		logger.debug("sortParam[orderBy:{},order:{}]",orderBy,order);
 		logger.debug("filterParam[studentName:{},startDate:{},endDate:{},notClear:{},klass:{},school:{}]",
 				new Object[]{studentName,startDate,endDate,notClear,klass,school});
+		Fee fee =feeService.getFee(feeId);
 		Page<Payment> payments = paymentService.listPaymentFromFee(page, pageSize,feeId,studentName,
 				klass,school,notClear,startDate,endDate,orderBy,order);
 		Map<String,Object> result = new HashMap<String,Object>();
@@ -153,7 +154,7 @@ public class PaymentController extends AbstractController {
 		}
 		result.put("filter", filter);
 		result.put("hasFilter",filter.keySet().size() != 0);
-		result.put("feeId", feeId);
+		result.put("fee", fee);
 		result.put("payments", payments);
 		return new ModelAndView("/payment/index").addObject("result",result);
 	}

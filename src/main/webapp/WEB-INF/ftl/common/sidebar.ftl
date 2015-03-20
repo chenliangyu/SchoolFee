@@ -30,21 +30,21 @@
 
         <li>
             <a href="#" class="dropdown-toggle">
-                <i class="icon-edit"></i>
+                <i class="icon-book"></i>
                 <span>费用记录</span>
                 <b class="arrow icon-angle-right"></b>
             </a>
 
             <!-- BEGIN Submenu -->
             <ul class="submenu">
-                <li><a href="${ctx}/action/payment/">缴费及记录</a></li>
+                <li><a href="${ctx}/action/payment/">缴费记录</a></li>
                 <li><a href="${ctx}/action/fee/">费用管理</a></li>
             </ul>
             <!-- END Submenu -->
         </li>
         <li>
             <a href="${ctx}/action/message/index" class="dropdown-toggle">
-                <i class="icon-edit"></i>
+                <i class="icon-comments"></i>
                 <span>消息通知</span>
             </a>
         </li>

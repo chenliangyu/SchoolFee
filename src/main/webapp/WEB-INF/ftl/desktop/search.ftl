@@ -27,7 +27,7 @@
               <label class="control-label">性别</label>
                <div class="controls">
                	  <label class="radio inline">
-                      <input type="radio" value="0" /> 随便
+                      <input type="radio" name="sex" value="-1" /> 随便
                   </label>
                   <label class="radio inline">
                       <input type="radio" name="sex" value="0" <#if result.filter.sex==0>checked</#if> /> 男孩
@@ -39,8 +39,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">返回</button>
-        <button type="submit" class="btn btn-primary">搜索</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true"><i class='icon-mail-reply'></i> 返回</button>
+        <button type="submit" class="btn btn-primary"><i class='icon-search'></i> 搜索</button>
     </div>
   </form>
 </div>

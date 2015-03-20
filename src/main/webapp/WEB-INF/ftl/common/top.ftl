@@ -41,7 +41,7 @@
                     <ul class="dropdown-menu dropdown-navbar" id="user_menu">
                         <li class="nav-header">
                             <i class="icon-time"></i>
-                            最近登录于${shiro.principal().lastLoginTime?time}
+                            最近登录于${shiro.principal().lastLoginTime?string("HH:mm:ss")}
                         </li>
                         <li class="divider visible-phone"></li>
                         <li class="visible-phone">

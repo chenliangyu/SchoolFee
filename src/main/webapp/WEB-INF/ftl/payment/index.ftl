@@ -31,8 +31,8 @@
         	<#include "common/sidebar.ftl">
         	<#if result.student??>
         		<#assign url=ctx+"/action/payment/student/"+result.student.id>
-        	<#elseif result.feeId??>
-        		<#assign url=ctx+"/action/payment/fee/"+result.feeId>
+        	<#elseif result.fee??>
+        		<#assign url=ctx+"/action/payment/fee/"+result.fee.id>
         	<#else>
         		<#assign url=ctx+"/action/payment/">
         	</#if>

@@ -93,7 +93,6 @@
                     </div>
                     <div class="form-actions">
                        <button type="submit" class="btn btn-primary add_payment"><i class="icon-ok"></i> 保存</button>
-                       <button type="reset" class="btn">重置</button>
                     </div>
                  </form>
             </div>

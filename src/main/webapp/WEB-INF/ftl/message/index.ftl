@@ -9,17 +9,20 @@
     	<link rel="stylesheet" type="text/css" href="${ctx}/assets/bootstrap-datepicker/css/datepicker.css">
     	<link rel="stylesheet" type="text/css" href="${ctx}/assets/bootstrap-switch/static/stylesheets/bootstrap-switch.css">
     	<style>
-    		.miss_fee{
-    			line-height:30px;
+    		.well{
+    			position:relative;
     		}
-    		.instalment_setting{
-    			display:none;
+    		.delete_message{
+    			position:absolute;
+    			right:10px;
+    			top:5px;
+    			cursor:pointer;
     		}
-    		.sms_setting{
-    			display:none;
-    		}
-    		div.datepicker{
-    			z-index:9999;
+    		.well-operator{
+    			position:absolute;
+    			left:10px;
+    			top:5px;
+    			cursor:pointer;
     		}
     	</style>
     </head>
@@ -29,13 +32,6 @@
         <div class="container-fluid" id="main-container">
         	<#include "common/top.ftl">
         	<#include "common/sidebar.ftl">
-        	<#if result.student??>
-        		<#assign url=ctx+"/action/payment/student/"+result.student.id>
-        	<#elseif result.feeId??>
-        		<#assign url=ctx+"/action/payment/fee/"+result.feeId>
-        	<#else>
-        		<#assign url=ctx+"/action/payment/">
-        	</#if>
             <!-- BEGIN Content -->
             <div id="main-content">
                 <!-- BEGIN Page Title -->
@@ -86,95 +82,32 @@
         <!--flaty scripts-->
         <script src="${ctx}/js/flaty.js"></script>
         <script>
-			$(".add_paymethod").on("click","input[name='payMethod']",function(e){
-				var value = $(this).val();
-				if(value === "0"){
-					$(".onepay_setting").show();
-					$(".instalment_setting").hide();
-				}else if(value === "1"){
-					$(".instalment_setting").show();
-					$(".onepay_setting").hide();
-				}
-			});
-			$(".add_payment").on("click",function(e){
-				e.preventDefault();
-				e.stopPropagation();
-				var form = $(".add_form");
-				var dataArray = form.serializeArray();
-				var data = {};
-				for(var i = 0,l = dataArray.length;i<l;i++){
-					if($.trim(dataArray[i].value)){
-						data[dataArray[i].name] = dataArray[i].value;
-					}
-				}
-				$.ajax({
-					url : form.prop("action"),
-					type:form.prop("method").toLowerCase(),
-					dataType : "json",
-					data : data
-				}).done(function(data){
-					if(data && data.result&&data.result.code === "success"){
-						alert(data.result.msg);
-						location.reload();
-					}
-				})
-			});
-			$(".add_sendsms input").on("change",function(e){
-				if($(this).is(":checked")){
-					$(".sms_setting").show();
-				}else{
-					$(".sms_setting").hide();
-				}
-			});
-			$(".payment_list").on("click",".delete_button",function(e){
-				var id = $(this).attr("data-id");
-				$.ajax({
-					url:"${ctx}/action/payment/delete/"+id,
-					type:"get",
-					dataType:"json"
-				}).done(function(data){
-					if(data && data.result && data.result.code === "success"){
-						alert(data.result.msg);
-						location.reload();
-					}
-				})
-			});
-			$(".payment_list").on("click",".pay_button",function(e){
-				var id = $(this).attr("data-id");
-				$(".payform_id").val(id);
-			});
-			$(".delete_payment").on("click",function(e){
-				var ids = []
-				$(".payment_id:checked").each(function(){
-					ids.push($(this).val());
-				});
-				$.ajax({
-					url:"${ctx}/action/payment/delete",
-					type:"post",
-					data : {ids:$.toJSON(ids)},
-					dataType:"json"
-				}).done(function(data){
-					if(data && data.result && data.result.code === "success"){
-						alert(data.result.msg);
-						location.reload();
-					}
-				})			
-			});
-			$(".payform_submit").click(function(e){
-				e.preventDefault();
-				e.stopPropagation();
-				var id = $(".payform_id").val();
-				var money = $(".payform_money").val();
-				$.ajax({
-					url:"${ctx}/action/payment/pay/"+id+"/"+money,
-					dataType:"json"
-				}).done(function(data){
-					if(data && data.result && data.result.code === "success"){
-						alert(data.result.msg);
-						location.reload();
-					}
-				})	
-			})
+        	(function(){
+        		function update(){
+	        		$.ajax({
+	        			url : "${ctx}/action/message/updatestatus",
+	        			dataType : "json"
+	        		}).fail(function(){
+	        			update();
+	        		})
+        		}
+        		update();
+        		$(".delete_message").click(function(e){
+        			var id = $(this).attr("data-id");
+        			var $this = $(this);
+        			$.ajax({
+	        			url : "${ctx}/action/message/delete/"+id,
+	        			dataType : "json"
+	        		}).done(function(){
+	        			var well = $this.parents(".well")
+	        			well.animate({
+	        				height:0
+	        			},"slow",function(){
+	        				well.remove();
+	        			});
+	        		})
+        		})
+        	})();
         </script>
     </body>
 </html>

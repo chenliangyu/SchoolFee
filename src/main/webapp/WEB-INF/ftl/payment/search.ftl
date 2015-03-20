@@ -24,7 +24,7 @@
                     <input type="text" name="studentName" id="studentName" class="input-large" value="${result.filter.studentName}">
                 </div>
             </div>
-    		<#if !result.feeId??>
+    		<#if !result.fee??>
         		<div class="control-group">
                     <label for="feeName" class="control-label">费用名</label>
                     <div class="controls">
@@ -72,8 +72,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">返回</button>
-        <button type="submit" class="btn btn-primary">搜索</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true"><i class='icon-mail-reply'></i> 返回</button>
+        <button type="submit" class="btn btn-primary"><i class='icon-search'></i> 搜索</button>
     </div>
   </form>
 </div>

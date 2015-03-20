@@ -13,8 +13,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">返回</button>
-        <button type="submit" class="btn btn-primary">搜索</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true"><i class='icon-mail-reply'></i> 返回</button>
+        <button type="submit" class="btn btn-primary"><i class='icon-search'></i> 搜索</button>
     </div>
   </form>
 </div>

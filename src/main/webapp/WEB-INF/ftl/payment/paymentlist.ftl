@@ -2,15 +2,15 @@
     <div class="span12">
         <div class="box">
             <div class="box-title">
-                <h3><i class="icon-table"></i><#if result.student??>${result.student.name}的</#if>缴费记录</h3>
+                <h3><i class="icon-table"></i><#if result.student??>${result.student.name}的</#if><#if result.fee??>${result.fee.name}的</#if>缴费记录</h3>
                 <div class="box-tool">
                     <a data-action="collapse" href="#"><i class="icon-chevron-up"></i></a>
                 </div>
             </div>
             <div class="box-content">
                 <div class="btn-toolbar pull-right clearfix">
-                    <a href="#modal-2" role="button" class="btn btn-info" data-toggle="modal"><i class="icon-cog"></i> 搜索</a>
-                    <button class="btn btn-danger delete_payment"><i class="icon-cog"></i> 删除</button>
+                    <a href="#modal-2" role="button" class="btn btn-info" data-toggle="modal"><i class="icon-search"></i> 搜索</a>
+                    <button class="btn btn-danger delete_payment"><i class="icon-trash"></i> 删除</button>
                 </div>
                 <#if result.hasFilter?? && result.hasFilter>
 	                <div style="margin:10px 0">
@@ -47,7 +47,7 @@
                         <th>学校</th>
                         <th>班级</th>
                         </#if>
-                        <#if !result.feeId??>
+                        <#if !result.fee??>
                         <th>费用名</th>
                         </#if>
                         <th>缴费类型</th>
@@ -67,7 +67,7 @@
                                 <td>${data.school}</td>
                                 <td>${data.klass}</td>
                                 </#if>
-                                <#if !result.feeId??>
+                                <#if !result.fee??>
                                 <td>${data.feeName}</td>
                                 </#if>
                                 <td><#if (data.payMethod == 0)>一次付清<#else>分期:共${data.instalment}期</#if></td>
@@ -107,8 +107,8 @@
                                 </td>
                                 <td>${data.createDate?string("yyyy年MM月dd日")}</td>
                                 <td>
-                                    <a href="#modal-3" role="button" data-id="${data.id}" class="btn btn-info btn-small pay_button" data-toggle="modal"><i class="icon-cog"></i> 缴费</a>
-                                    <a class="btn btn-danger btn-small delete_button" data-id="${data.id}"  href="#"><i class="icon-trash"></i>删除</a>
+                                    <a href="#modal-3" role="button" data-id="${data.id}" class="btn btn-primary btn-small pay_button" data-toggle="modal"><i class="icon-credit-card"></i> 缴费</a>
+                                    <a class="btn btn-danger btn-small delete_button" data-id="${data.id}"  href="#"><i class="icon-trash"></i> 删除</a>
                                 </td>
                             </tr>
                     	</#list>

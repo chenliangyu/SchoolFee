@@ -47,9 +47,9 @@
                             </div>
                             <div class="box-content">
                                 <div class="btn-toolbar pull-right clearfix">
-                                    <a href='${ctx}/action/student/add' class="btn btn-primary"><i class="icon-cog"></i> 添加学生</a>
-                                    <a href="#modal-2" role="button" class="btn btn-info" data-toggle="modal"><i class="icon-cog"></i> 搜索</a>
-                                    <button class="btn btn-danger delete_student"><i class="icon-cog"></i> 删除</button>
+                                    <a href='${ctx}/action/student/add' class="btn btn-primary"><i class="icon-plus"></i> 添加学生</a>
+                                    <a href="#modal-2" role="button" class="btn btn-info" data-toggle="modal"><i class="icon-search"></i> 搜索</a>
+                                    <button class="btn btn-danger delete_student"><i class="icon-trash"></i> 删除</button>
                                 </div>
                                 <#if result.hasFilter?? && result.hasFilter>
 	                            	<div style='margin:10px 0'>
@@ -98,9 +98,9 @@
 		                                        <td>${data.school}</td>
 		                                        <td>${data.phone}</td>
 		                                        <td>
-		                                            <a class="btn btn-primary btn-small"  href="${ctx}/action/student/modify/${data.id}"><i class="icon-edit"></i> 编辑</a>
+		                                       		<a class="btn btn-primary btn-small"  href="${ctx}/action/payment/student/${data.id}/0"><i class="icon-credit-card"></i> 缴费</a>
+		                                            <a class="btn btn-info btn-small"  href="${ctx}/action/student/modify/${data.id}"><i class="icon-edit"></i> 编辑</a>
 		                                            <a class="btn btn-danger btn-small"  href="${ctx}/action/student/delete/${data.id}"><i class="icon-trash"></i> 删除</a>
-		                                            <a class="btn btn-danger btn-small"  href="${ctx}/action/payment/student/${data.id}/0"><i class="icon-trash"></i> 缴费</a>
 		                                        </td>
 		                                    </tr>
                                     	</#list>

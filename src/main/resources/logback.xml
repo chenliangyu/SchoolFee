@@ -86,7 +86,7 @@
 		</filter>
 		<append>false</append>
 	</appender>
- 	<logger name="org.springframework" level="debug"/>
+ 	<logger name="org.springframework" level="info"/>
 	<!-- 日志输出级别 为debug -->
 	<root level="debug">
 		<appender-ref ref="consoleAppender" />

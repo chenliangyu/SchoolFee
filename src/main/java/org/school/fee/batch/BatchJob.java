@@ -20,10 +20,11 @@ public class BatchJob {
 	@Autowired
 	MessageService messageService;
 	
-	@Scheduled(cron="0 0 10 * * ?")
+	@Scheduled(cron="*/1 * * * * ?")
 	public void execute(){  
 		try{
 			List<Payment> payments = paymentService.findNotClearPaymentByDate(new Date());
+			logger.debug("find not clear payment :{}",payments.size());
 			Iterator<Payment> it = payments.iterator();
 			while(it.hasNext()){
 				Payment payment = it.next();

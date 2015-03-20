@@ -1,5 +1,6 @@
 package org.school.fee.controller;
 
+import org.bson.types.ObjectId;
 import org.school.fee.models.Message;
 import org.school.fee.models.User;
 import org.school.fee.service.MessageService;
@@ -30,11 +31,23 @@ public class MessageController extends AbstractController {
 		return new ModelAndView("forward:/action/message/index/0");
 	}
 	
+	@RequestMapping("/updatestatus")
+	public ModelAndView update(){
+		User user = ShiroUtils.getCurrentUser();
+		messageService.updateAllNewMessage(user.getId());
+		return new ModelAndView().addObject("result", new Result("更新成功","success"));
+	}
+	
 	@RequestMapping("/getcount")
 	public ModelAndView getCount(){
 		ModelAndView  mv = new ModelAndView();
 		User user = ShiroUtils.getCurrentUser();
 		long count = messageService.countNewMessage(user.getId());
 		return mv.addObject("result",new Result("success",count));
+	}
+	@RequestMapping("/delete/{id}")
+	public ModelAndView delete(@PathVariable ObjectId id){
+		messageService.deleteMessage(id);
+		return new ModelAndView().addObject("result", new Result("删除成功","success"));
 	}
 }

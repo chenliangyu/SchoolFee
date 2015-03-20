@@ -73,7 +73,11 @@ public class StudentController extends AbstractController {
 			filter.put("ageStart", ageEnd);
 		}
 		if(sex!=null){
-			filter.put("sex", sex);
+			if(sex==-1){
+				sex = null;
+			}else{
+				filter.put("sex", sex);
+			}
 		}
 		if(filter.keySet().size()!=0){
 			result.put("hasFilter", true);
