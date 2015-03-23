@@ -122,10 +122,34 @@ public class AnalyticsServiceTest {
 		Page<PayAnalytics> lists = analyticsService.analytics(0, 10);
 		assertEquals(lists.getNumberOfElements(), 2);
 		PayAnalytics result1 = lists.getContent().get(0);
-		//assertEquals(result1.getFeeName(),"作业辅导费");
-		//PayAnalyticsForKlassAndSchool singleResult1 = result1.getResult().get(0);
+		assertEquals(result1.getFeeName(),"英语辅导费");
+		PayAnalyticsForKlassAndSchool singleResult3 = result1.getResult().get(0);
 		assertEquals(result1.getResult().size(), 2);
-		/*assertEquals(singleResult1.getKlass(),"一班");
+		assertEquals(singleResult3.getKlass(),"一班");
+		assertEquals(singleResult3.getSchool(),"补习班");
+		assertEquals(singleResult3.getHasPayStudentNumber(),1);
+		assertEquals(singleResult3.getClearStudentNumber(),0);
+		assertEquals(singleResult3.getNotClearStudentNumber(),1);
+		assertEquals(singleResult3.getInstalmentClearStudentNumber(),0);
+		assertEquals(singleResult3.getInstalmentStudentNumber(),1);
+		assertEquals(singleResult3.getInstalmentNotClearStudentNumber(),1);
+		assertEquals(singleResult3.getOnepayStudentNumber(),0);
+		assertEquals(singleResult3.getOnepayNotClearStudentNumber(),0);
+		assertEquals(singleResult3.getOnepayClearStudentNumber(),0);
+		assertEquals(singleResult3.getTotal(),new BigDecimal(500));
+		assertEquals(singleResult3.getPayTotal(),new BigDecimal(250));
+		assertEquals(singleResult3.getOnepayTotal(),new BigDecimal(0));
+		assertEquals(singleResult3.getOnepayPayTotal(),new BigDecimal(0));
+		assertEquals(singleResult3.getInstalmentTotal(),new BigDecimal(500));
+		assertEquals(singleResult3.getInstalmentPayTotal(),new BigDecimal(250));
+		
+		
+		PayAnalytics result2 = lists.getContent().get(1);
+		assertEquals(result2.getFeeName(),"作业辅导费");
+		PayAnalyticsForKlassAndSchool singleResult1 = result2.getResult().get(0);
+		
+		assertEquals(result2.getResult().size(), 2);
+		assertEquals(singleResult1.getKlass(),"一班");
 		assertEquals(singleResult1.getSchool(),"补习班");
 		assertEquals(singleResult1.getHasPayStudentNumber(),1);
 		assertEquals(singleResult1.getClearStudentNumber(),0);
@@ -142,29 +166,5 @@ public class AnalyticsServiceTest {
 		assertEquals(singleResult1.getOnepayPayTotal(),new BigDecimal(1000));
 		assertEquals(singleResult1.getInstalmentTotal(),new BigDecimal(0));
 		assertEquals(singleResult1.getInstalmentPayTotal(),new BigDecimal(0));
-	*/	
-		
-		
-		PayAnalytics result2 = lists.getContent().get(1);
-		//assertEquals(result2.getFeeName(),"英语辅导费");
-		PayAnalyticsForKlassAndSchool singleResult3 = result2.getResult().get(0);
-		assertEquals(result2.getResult().size(), 2);
-		/*assertEquals(singleResult3.getKlass(),"一班");
-		assertEquals(singleResult3.getSchool(),"补习班");
-		assertEquals(singleResult3.getHasPayStudentNumber(),1);
-		assertEquals(singleResult3.getClearStudentNumber(),0);
-		assertEquals(singleResult3.getNotClearStudentNumber(),1);
-		assertEquals(singleResult3.getInstalmentClearStudentNumber(),0);
-		assertEquals(singleResult3.getInstalmentStudentNumber(),1);
-		assertEquals(singleResult3.getInstalmentNotClearStudentNumber(),1);
-		assertEquals(singleResult3.getOnepayStudentNumber(),0);
-		assertEquals(singleResult3.getOnepayNotClearStudentNumber(),0);
-		assertEquals(singleResult3.getOnepayClearStudentNumber(),0);
-		assertEquals(singleResult3.getTotal(),new BigDecimal(500));
-		assertEquals(singleResult3.getPayTotal(),new BigDecimal(250));
-		assertEquals(singleResult3.getOnepayTotal(),new BigDecimal(0));
-		assertEquals(singleResult3.getOnepayPayTotal(),new BigDecimal(0));
-		assertEquals(singleResult3.getInstalmentTotal(),new BigDecimal(500));
-		assertEquals(singleResult3.getInstalmentPayTotal(),new BigDecimal(250));*/
 	}
 }

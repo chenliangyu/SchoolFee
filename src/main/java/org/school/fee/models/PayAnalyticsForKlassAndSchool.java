@@ -101,7 +101,7 @@ public class PayAnalyticsForKlassAndSchool implements Serializable{
 		return getInstalmentNotClearStudentNumber() + getOnepayNotClearStudentNumber();
 	}
 	public int getClearStudentNumber(){
-		return getHasPayStudentNumber() - getInstalmentNotClearStudentNumber();
+		return getHasPayStudentNumber() - getNotClearStudentNumber();
 	}
 	public int getInstalmentClearStudentNumber(){
 		return getInstalmentStudentNumber() - getInstalmentNotClearStudentNumber();

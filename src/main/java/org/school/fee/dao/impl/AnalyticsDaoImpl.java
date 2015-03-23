@@ -61,10 +61,10 @@ public class AnalyticsDaoImpl implements AnalyticsDao {
 			json.append("'result':{'$push':{'klass':'$_id.klass','school':'$_id.school','onepayStudentNumber':'$onepayStudentNumber',");
 			json.append("'instalmentStudentNumber':'$instalmentStudentNumber','onepayNotClearStudentNumber':'$onepayNotClearStudentNumber',");
 			json.append("'instalmentNotClearStudentNumber':'$instalmentNotClearStudentNumber','onepayPayTotal':'$onepayPayTotal',");
-			json.append("'onepaytotal':'$onepaytotal','instalmentPayTotal':'$instalmentPayTotal','instalmentTotal':'$instalmentTotal'}},");
+			json.append("'onepayTotal':'$onepayTotal','instalmentPayTotal':'$instalmentPayTotal','instalmentTotal':'$instalmentTotal'}},");
 			json.append("'createDate':{'$last':'$createDate'}");
 		json.append("}},");
-		json.append("{$sort:{'createDate':-1}},");
+		json.append("{$sort:{'createDate':-1,payTotal:-1}},");
 		json.append("{$skip:"+pageable.getOffset()+"},");
 		json.append("{$limit:"+pageable.getPageSize()+"}");
 		json.append("]");
