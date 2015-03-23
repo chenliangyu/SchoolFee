@@ -14,7 +14,7 @@ public interface MessageService {
 	public void sendMessage(Payment payment) throws IOException;
 	public String getSMSTemplate();
 	public void sendNotify(Student student,Payment payment) throws IOException;
-	public void sendSMS(Student student,Payment payment) throws IOException;
+	public void sendSMS(Student student,Payment payment);
 	public Page<Message> listMessage(Integer page,Integer pageSize,ObjectId userId);
 	public void deleteMessage(ObjectId id);
 	public void deleteMessage(ObjectId[] id);

@@ -20,7 +20,7 @@ public class BatchJob {
 	@Autowired
 	MessageService messageService;
 	
-	@Scheduled(cron="*/1 * * * * ?")
+	@Scheduled(cron="0 0 12 * * ?")
 	public void execute(){  
 		try{
 			List<Payment> payments = paymentService.findNotClearPaymentByDate(new Date());

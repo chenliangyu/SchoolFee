@@ -106,7 +106,12 @@
 	        				well.remove();
 	        			});
 	        		})
-        		})
+        		});
+        		$(".show_payment").click(function(e){
+        			e.preventDefault();
+        			var studentId = $(this).attr("data-id");
+        			location.href = "${ctx}/action/payment/student/"+studentId+"/0";
+        		});
         	})();
         </script>
     </body>

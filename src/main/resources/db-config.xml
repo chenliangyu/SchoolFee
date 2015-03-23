@@ -26,8 +26,16 @@
 	<!-- mongodb的主要操作对象，所有对mongodb的增删改查的操作都是通过它完成 -->
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+		<constructor-arg name="mongoConverter" ref="mappingConverter"/>
 	</bean>
 	<mongo:auditing />
-	<mongo:mapping-converter base-package="org.school.fee.models" />
+	<mongo:mapping-converter base-package="org.school.fee.models">
+		<mongo:custom-converters>
+			<mongo:converter ref="bigDecimalToDoubleConverter"></mongo:converter>
+			<mongo:converter ref="doubleToBigDecimalConverter"></mongo:converter>
+		</mongo:custom-converters>
+	</mongo:mapping-converter>
+	<bean id="bigDecimalToDoubleConverter" class="org.school.fee.converters.BigDecimalToDoubleConverter"></bean>
+	<bean id="doubleToBigDecimalConverter" class="org.school.fee.converters.DoubleToBigDecimalConverter"></bean>
 	<mongo:repositories base-package="org.school.fee.repository"/>
 </beans>

@@ -143,7 +143,7 @@ public class MessageServiceImpl implements MessageService{
 				payRecord.append("</ul></div>");
 			}
 			String feeName = payment.getPayMethod() == PayMethod.onePay.ordinal()?payment.getFeeName() : "第" + payment.getPayResults().size()+"期的"+payment.getFeeName();
-			String notify = MessageFormat.format(template,studentName,feeName,expireDate,total,totalToShow,payRecord,rest);
+			String notify = MessageFormat.format(template,studentName,feeName,expireDate,total,totalToShow,payRecord,rest,student.getId());
 			logger.debug("send a notify which is :{}",notify);
 			Message message = new Message();
 			message.setMsgContent(notify);
@@ -155,7 +155,7 @@ public class MessageServiceImpl implements MessageService{
 	public void saveMessage(Message message){
 		messageRepository.insert(message);
 	}
-	public void sendSMS(Student student,Payment payment) throws IOException {
+	public void sendSMS(Student student,Payment payment) {
 		String template = getSMSTemplate();
 		String smsContent;
 		if(payment.getPayMethod() == PayMethod.onePay.ordinal()){

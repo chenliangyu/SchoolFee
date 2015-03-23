@@ -27,7 +27,7 @@
                                 </#list>
                              </select>
                              <#else>
-                             	<span class='span6 miss_fee'>先去<a href="#">费用管理</a>里添加几个费用先吧。否则没法缴费</span>
+                             	<span class='span6 miss_fee'>先去<a href="${ctx}/action/fee/">费用管理</a>里添加几个费用先吧。否则没法缴费</span>
                              </#if>
                         </div>
                     </div>
