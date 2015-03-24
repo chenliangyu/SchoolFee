@@ -98,7 +98,7 @@ public class StudentController extends AbstractController {
 	}
 	
 	@RequestMapping("/postadd")
-	public ModelAndView postadd(Student student){
+	public ModelAndView postadd(Student student,Integer page){
 		logger.debug("url:{}","/action/student/postadd");
 		logger.debug("student:{}",student);
 		Map<String,Object> result = new HashMap<String,Object>();
@@ -109,6 +109,7 @@ public class StudentController extends AbstractController {
 			studentService.insertStudent(student);
 		}else{
 			result.put("student",student);
+			result.put("page", page);
 			studentService.saveStudent(student);
 		}
 		return new ModelAndView("desktop/addstudent").addObject("result", result);

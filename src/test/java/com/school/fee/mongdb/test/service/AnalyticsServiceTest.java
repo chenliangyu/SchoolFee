@@ -119,7 +119,7 @@ public class AnalyticsServiceTest {
 	
 	@Test
 	public void testListAnalytics(){
-		Page<PayAnalytics> lists = analyticsService.analytics(0, 10);
+		Page<PayAnalytics> lists = analyticsService.analytics(0, 10,null,null,null,null,null,null,null,null);
 		assertEquals(lists.getNumberOfElements(), 2);
 		PayAnalytics result1 = lists.getContent().get(0);
 		assertEquals(result1.getFeeName(),"英语辅导费");
@@ -146,24 +146,24 @@ public class AnalyticsServiceTest {
 		
 		PayAnalytics result2 = lists.getContent().get(1);
 		assertEquals(result2.getFeeName(),"作业辅导费");
-		PayAnalyticsForKlassAndSchool singleResult1 = result2.getResult().get(0);
+		PayAnalyticsForKlassAndSchool singleResult1 = result2.getResult().get(1);
 		
 		assertEquals(result2.getResult().size(), 2);
-		assertEquals(singleResult1.getKlass(),"一班");
+		assertEquals(singleResult1.getKlass(),"二班");
 		assertEquals(singleResult1.getSchool(),"补习班");
 		assertEquals(singleResult1.getHasPayStudentNumber(),1);
-		assertEquals(singleResult1.getClearStudentNumber(),0);
-		assertEquals(singleResult1.getNotClearStudentNumber(),1);
+		assertEquals(singleResult1.getClearStudentNumber(),1);
+		assertEquals(singleResult1.getNotClearStudentNumber(),0);
 		assertEquals(singleResult1.getInstalmentClearStudentNumber(),0);
 		assertEquals(singleResult1.getInstalmentStudentNumber(),0);
 		assertEquals(singleResult1.getInstalmentNotClearStudentNumber(),0);
 		assertEquals(singleResult1.getOnepayStudentNumber(),1);
-		assertEquals(singleResult1.getOnepayNotClearStudentNumber(),1);
-		assertEquals(singleResult1.getOnepayClearStudentNumber(),0);
+		assertEquals(singleResult1.getOnepayNotClearStudentNumber(),0);
+		assertEquals(singleResult1.getOnepayClearStudentNumber(),1);
 		assertEquals(singleResult1.getTotal(),new BigDecimal(1200));
-		assertEquals(singleResult1.getPayTotal(),new BigDecimal(1000));
+		assertEquals(singleResult1.getPayTotal(),new BigDecimal(1200));
 		assertEquals(singleResult1.getOnepayTotal(),new BigDecimal(1200));
-		assertEquals(singleResult1.getOnepayPayTotal(),new BigDecimal(1000));
+		assertEquals(singleResult1.getOnepayPayTotal(),new BigDecimal(1200));
 		assertEquals(singleResult1.getInstalmentTotal(),new BigDecimal(0));
 		assertEquals(singleResult1.getInstalmentPayTotal(),new BigDecimal(0));
 	}

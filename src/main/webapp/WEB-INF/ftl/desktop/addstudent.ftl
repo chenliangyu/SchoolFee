@@ -46,14 +46,15 @@
                                 </div>
                             </div>
                             <div class="box-content">
-                                <form action="${ctx}/action/student/postadd" method="post" class="form-horizontal form-row-separated add_form">
+                                <form action="${ctx}/action/student/postadd" method="post" id="validation-form" class="form-horizontal form-row-separated add_form">
                                 <#if result.student??>
                                 	<input type='hidden' name="id" value="${result.student.id}" />
                                 </#if>
                                     <div class="control-group">
                                         <label for="name" class="control-label">姓名</label>
                                         <div class="controls">
-                                            <input type="text" name="name" id="name" placeholder="真实姓名" value='${result.student.name}' class="input-medium">
+                                            <input type="text" name="name" id="name" placeholder="真实姓名" data-rule-required="true" value='${result.student.name}' class="input-medium">
+                                            <span class="help-inline">必填项</span>
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -77,15 +78,15 @@
                                     <div class="control-group">
                                         <label for="klass" class="control-label">班级</label>
                                         <div class="controls">
-                                            <input type="text" name="klass" id="klass" placeholder="所属的你的学校的班级" class="input-large" value='${result.student.klass}'>
-                                            <span class="help-inline">填写班级，如：小一班</span>
+                                            <input type="text" name="klass" id="klass" data-rule-required="true" placeholder="所属的你的学校的班级" class="input-large" value='${result.student.klass}'>
+                                            <span class="help-inline">必填项,填写班级，如：小一班</span>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label for="school" class="control-label">学校</label>
                                         <div class="controls">
-                                            <input type="text" name="school" id="school" placeholder="所属的你的学校将学生" class="input-large"  value='${result.student.school}'>
-                                            <span class="help-inline">填写学校，如：幼儿园</span>
+                                            <input type="text" name="school" id="school" placeholder="所属的你的学校将学生" data-rule-required="true" class="input-large"  value='${result.student.school}'>
+                                            <span class="help-inline">必填项,填写学校，如：幼儿园</span>
                                         </div>
                                     </div>
                                      <div class="control-group">
@@ -103,8 +104,8 @@
                                     <div class="control-group">
                                         <label for="phone" class="control-label">家长联系电话</label>
                                         <div class="controls">
-                                            <input type="text" name="phone" id="phone" placeholder="多个以空格隔开,用于发送短信通知" class="input-xlarge"  value='${result.student.phone}'>
-                                            <span class="help-inline">填写电话，如：18520879240 18212345678</span>
+                                            <input type="text" name="phone" id="phone" placeholder="多个以空格隔开,用于发送短信通知" data-rule-required="true" class="input-xlarge"  value='${result.student.phone}'>
+                                            <span class="help-inline">必填项,填写电话，如：18520879240 18212345678</span>
                                         </div>
                                     </div>
                                     <div class="form-actions">
@@ -133,7 +134,8 @@
         <script src="${ctx}/assets/bootstrap/bootstrap.min.js"></script>
         <script src="${ctx}/assets/nicescroll/jquery.nicescroll.min.js"></script>
         <!--page specific plugin scripts-->
-
+        <script type="text/javascript" src="${ctx}/assets/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="${ctx}/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
         <!--flaty scripts-->
         <script src="${ctx}/js/flaty.js"></script>
@@ -146,6 +148,7 @@
     			}
     		}else if(isModify === "true"){
     			alert("修改成功");
+    			history.go(-2);
     		}
     	</script>
     </body>

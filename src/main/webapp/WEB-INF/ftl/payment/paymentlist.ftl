@@ -9,6 +9,9 @@
             </div>
             <div class="box-content">
                 <div class="btn-toolbar pull-right clearfix">
+                	<#if !result.student??>
+                		<button class="btn btn-primary analysis_button"><i class="icon-signal"></i> 统计</button>
+                	</#if>
                     <a href="#modal-2" role="button" class="btn btn-info" data-toggle="modal"><i class="icon-search"></i> 搜索</a>
                     <button class="btn btn-danger delete_payment"><i class="icon-trash"></i> 删除</button>
                 </div>

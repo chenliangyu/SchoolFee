@@ -86,6 +86,8 @@
         <script type="text/javascript" src="${ctx}/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
         <script type="text/javascript" src="${ctx}/assets/bootstrap-switch/static/js/bootstrap-switch.js"></script>
         <!--page specific plugin scripts-->
+  		<script type="text/javascript" src="${ctx}/assets/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="${ctx}/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
 
         <!--flaty scripts-->
@@ -100,6 +102,11 @@
 					$(".instalment_setting").show();
 					$(".onepay_setting").hide();
 				}
+			});
+			$(".analysis_button").on("click",function(e){
+				var form = $(".search_form");
+				form.attr("action","${ctx}/action/analytics/list/0<#if result.fee??>?feeId=${result.fee.id}</#if>");
+				$(".search_submit").click();
 			});
 			$(".add_payment").on("click",function(e){
 				e.preventDefault();
@@ -179,7 +186,17 @@
 						location.reload();
 					}
 				})	
-			})
+			});
+			$(".instalmentmethod_select").change(function(e){
+				var value = $(this).val();
+				if(value==0){
+					$(".instalmentmethod_month").show();
+					$(".instalmentmethod_week").hide();
+				}else{
+					$(".instalmentmethod_month").hide();
+					$(".instalmentmethod_week").show();
+				}
+			});
         </script>
     </body>
 </html>

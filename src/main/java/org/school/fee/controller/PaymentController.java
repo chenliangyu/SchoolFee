@@ -218,4 +218,5 @@ public class PaymentController extends AbstractController {
 		paymentService.deletePayment(id);
 		return new ModelAndView("desktop/index").addObject("result",new Result("删除成功","success"));
 	}
+	
 }

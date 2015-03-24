@@ -8,7 +8,7 @@
                 </div>
             </div>
             <div class="box-content">
-                <form action="${ctx}/action/payment/add" method="post" class="form-horizontal form-row-separated add_form">
+                <form action="${ctx}/action/payment/add" id="validation-form" method="post" class="form-horizontal form-row-separated add_form">
                 	<input type='hidden' name="studentId" value="${result.student.id}" />
                     <div class="control-group">
                         <label for="name" class="control-label">姓名</label>
@@ -46,13 +46,27 @@
                         <label for="instalment" class="control-label">分期数</label>
                         <div class="controls">
                             <input type="text" name="instalment" id="instalment" placeholder="分多少期" class="input-mini">
+                            <span class="help-inline">必填项</span>
                         </div>
                     </div>
                     <div class="control-group instalment_setting">
                         <label for="school" class="control-label">过期时间</label>
                         <div class="controls expire_month">
-                            	每月<input type="text" name="expireDayOfMonth" id="expireDayOfMonth" class="input-mini">号
-                            	<input type="hidden" name="instalmentMethod" value="0"/>
+                            	每<select name='instalmentMethod' class="span1 instalmentmethod_select"><option value=0>月</option><option value=1>周</option></select>
+                            	<span class="instalmentmethod_month"><input type="text" name="expireDayOfMonth" id="expireDayOfMonth" class="input-mini">号</span>
+                            	<span class="instalmentmethod_week" style="display:none">
+                            		<select name='expireDayOfWeek' class="span1">
+                            			<option value="">请选择</option>
+                            			<option value=7>日</option>
+                            			<option value=1>一</option>
+                            			<option value=2>二</option>
+                            			<option value=3>三</option>
+                            			<option value=4>四</option>
+                            			<option value=5>五</option>
+                            			<option value=6>六</option>
+                            		</select>
+                            	</span>
+                            	<span class="help-inline">必填项</span>
                         </div>
                     </div>
                     <div class="control-group onepay_setting">

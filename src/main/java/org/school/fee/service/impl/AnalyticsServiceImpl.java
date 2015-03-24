@@ -1,5 +1,8 @@
 package org.school.fee.service.impl;
 
+import java.util.Date;
+
+import org.bson.types.ObjectId;
 import org.school.fee.dao.AnalyticsDao;
 import org.school.fee.models.PayAnalytics;
 import org.school.fee.service.AnalyticsService;
@@ -15,10 +18,13 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 	@Autowired
 	AnalyticsDao analyticsDao;
 	
-	public Page<PayAnalytics> analytics(Integer page,Integer pageSize) {
+	public Page<PayAnalytics> analytics(Integer page,Integer pageSize,ObjectId feeId,String feeName,
+			String studentName,String klass,String school,Boolean notClear,
+			Date startDate,Date endDate) {
 		// TODO Auto-generated method stub
 		Pageable pageable = PageUtils.buildPageRequest(page, pageSize, "createDate", "desc");
-		return analyticsDao.listAnalytics(pageable);
+		return analyticsDao.listAnalytics(pageable,feeId,feeName,studentName,klass,school,notClear,
+				startDate,endDate);
 	}
 
 }

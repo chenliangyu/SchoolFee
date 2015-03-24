@@ -347,10 +347,10 @@ $(function() {
     	var today = new Date();
     	var dateString = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
     	if(!$("input.date-picker").prop("value")){
-    		$("input.date-picker").attr("value",dateString);
+    		$("input.date-picker").attr("value","");
     	}
     	if(!$("div.date-picker").attr("data-date")){
-    		$("div.date-picker").attr("data-date",dateString);
+    		$("div.date-picker").attr("data-date","");
     	}
         $(".date-picker").datepicker()
     }
@@ -563,6 +563,7 @@ $(function() {
         var e = function(e) {
             $(e).closest(".control-group").removeClass("success")
         };
+        $.validator.messages.required="必填项";
         $("#validation-form").validate({
             errorElement: "span",
             errorClass: "help-inline",
@@ -581,7 +582,9 @@ $(function() {
             success: function(e) {
                 e.closest(".control-group").removeClass("error").addClass("success")
             },
-            submitHandler: function(e) {}
+            submitHandler: function(e) {
+            	e.submit();
+            }
         })
     }
     if (jQuery().plot) {

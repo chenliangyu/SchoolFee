@@ -37,6 +37,7 @@
 
             <!-- BEGIN Submenu -->
             <ul class="submenu">
+           		<li><a href="${ctx}/action/analytics/list/">费用统计</a></li>
                 <li><a href="${ctx}/action/payment/">缴费记录</a></li>
                 <li><a href="${ctx}/action/fee/">费用管理</a></li>
             </ul>

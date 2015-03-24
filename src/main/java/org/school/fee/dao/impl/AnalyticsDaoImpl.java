@@ -1,9 +1,11 @@
 package org.school.fee.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.school.fee.dao.AnalyticsDao;
 import org.school.fee.models.PayAnalytics;
 import org.slf4j.Logger;
@@ -15,11 +17,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import com.mongodb.AggregationOutput;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
+
+import freemarker.template.utility.StringUtil;
 
 @Repository
 public class AnalyticsDaoImpl implements AnalyticsDao {
@@ -27,11 +32,14 @@ public class AnalyticsDaoImpl implements AnalyticsDao {
 	@Autowired
 	MongoTemplate mongoTemplate;
 	
-	public Page<PayAnalytics> listAnalytics(Pageable pageable) {
+	public Page<PayAnalytics> listAnalytics(Pageable pageable,ObjectId feeId,String feeName,
+			String studentName,String klass,String school,Boolean notClear,
+			Date startDate,Date endDate) {
 		// TODO Auto-generated method stub
 		DBCollection dbCollection = mongoTemplate.getCollection("payment");
 		StringBuilder json = new StringBuilder();
 		json.append("[");
+		json.append(buildMatch(feeId,feeName,studentName,klass,school,notClear,startDate,endDate));
 		json.append("{'$unwind':'$money'},");
 		json.append("{'$group':{");
 			json.append("'_id':{'feeId':'$feeId','studentId':'$studentId'},");
@@ -80,6 +88,61 @@ public class AnalyticsDaoImpl implements AnalyticsDao {
 		}
 		long total = countAnalytics();
 		return new PageImpl<PayAnalytics>(payAnalyticses,pageable,total);
+	}
+	private Object buildMatch(ObjectId feeId, String feeName,String studentName, String klass,
+			String school, Boolean notClear, Date startDate, Date endDate) {
+		Boolean hasFilter = false;
+		StringBuilder json = new StringBuilder();
+		json.append("{'$match':{");
+		if(feeId!=null){
+			json.append("feeId:"+JSON.serialize(feeId));
+			hasFilter = true;
+		}
+		if(feeName!=null && !feeName.equals("")){
+			if(hasFilter)json.append(",");
+			json.append("'feeName':'"+feeName);
+			hasFilter = true;
+		}
+		if(studentName!=null && !studentName.equals("")){
+			if(hasFilter)json.append(",");
+			json.append("'studentName':'"+studentName+"'");
+			hasFilter = true;
+		}
+		if(klass!=null && !klass.equals("")){
+			if(hasFilter)json.append(",");
+			json.append("'klass':'"+klass+"'");
+			hasFilter = true;
+		}
+		if(school!=null && !school.equals("")){
+			if(hasFilter)json.append(",");
+			json.append("'school':'"+school+"'");
+			hasFilter = true;
+		}
+		if(notClear!=null){
+			if(hasFilter)json.append(",");
+			json.append("'payResults.status':"+ (notClear?1:0));
+			hasFilter = true;
+		}
+		if(startDate!=null || endDate!=null){
+			if(hasFilter)json.append(",");
+			json.append("'payResults.expireDate':{");
+			if(startDate!=null){
+				json.append("'$gte':"+JSON.serialize(startDate));
+				hasFilter = true;
+			}
+			if(endDate!=null){
+				if(hasFilter)json.append(",");
+				json.append("'$lte':"+JSON.serialize(endDate));
+				hasFilter = true;
+			}
+			json.append("}");
+		}
+		json.append("}},");
+		if(hasFilter){
+			return json.toString();
+		}else{
+			return "";
+		}
 	}
 	public long countAnalytics(){
 		StringBuilder json = new StringBuilder();
