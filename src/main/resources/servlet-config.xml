@@ -17,7 +17,7 @@
       class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <list>
-                <bean id="stringToDateConveter" class="org.school.fee.support.utils.StringToDateConverter">
+                <bean id="stringToDateConveter" class="org.school.fee.converters.StringToDateConverter">
 					<property name="format" value="yyyy-MM-dd" />
 				</bean>
             </list>
