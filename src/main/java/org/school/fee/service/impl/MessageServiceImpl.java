@@ -2,9 +2,11 @@ package org.school.fee.service.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.MessageFormat;
@@ -28,6 +30,7 @@ import org.school.fee.service.MessageService;
 import org.school.fee.service.PaymentService;
 import org.school.fee.service.StudentService;
 import org.school.fee.service.UserService;
+import org.school.fee.support.enums.InstalmentMethod;
 import org.school.fee.support.enums.PayMethod;
 import org.school.fee.support.enums.PayStatus;
 import org.school.fee.support.enums.SMSPeriod;
@@ -86,7 +89,9 @@ public class MessageServiceImpl implements MessageService{
 		if(file.exists()){
 			 BufferedReader reader = null;
 		        try {
-		            reader = new BufferedReader(new FileReader(file));
+	        	    FileInputStream in = new FileInputStream(file);
+	        	    // 指定读取文件时以UTF-8的格式读取
+	        	    reader = new BufferedReader(new InputStreamReader(in,"UTF-8"));
 		            StringBuilder info = new StringBuilder();
 		            String tempString = null;
 		            while ((tempString = reader.readLine()) != null) {
@@ -197,7 +202,8 @@ public class MessageServiceImpl implements MessageService{
 		StringBuilder feeName = new StringBuilder();
 		BigDecimal total = BigDecimal.ZERO;
 		BigDecimal rest = BigDecimal.ZERO;
-		feeName.append("第");
+		feeName.append(payment.getFeeName());
+		feeName.append("的第");
 		int i = 1;
 		for(PayResult result : payResults){
 			result.setLastSMSSendDate(today);
@@ -208,11 +214,13 @@ public class MessageServiceImpl implements MessageService{
 				}
 				total = total.add(result.getPayMoney());
 				rest = rest.add(result.getRestMoney());
+				i++;
+			}else{
+				break;
 			}
-			i++;
 		}
-		feeName.append("期的");
-		feeName.append(payment.getFeeName());
+		feeName.append(payment.getInstalmentMethod() == InstalmentMethod.Month.ordinal()?"个月":"周");
+		feeName.append("的费用");
 		String studentName = student.getName();
 		String showTotal = total.setScale(1, RoundingMode.HALF_UP).toString();
 		String showRest = rest.setScale(1,RoundingMode.HALF_UP).toString();

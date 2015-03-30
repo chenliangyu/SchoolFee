@@ -43,6 +43,7 @@
 				/action/login=anon
 				/action/postlogin=anon
 				/action/logout=anon
+				/action/test/**=anon
 				/**/*.html=anon
 				/**/*.js=anon
 				/**/*.css=anon
