@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 
 public class MD5 {
 	/*
-	 * 下面这些S11-S44实际上是\uFFFD \uFFFD4*4的矩阵，在原始的C实现中是\uFFFD#define 现的�?
+	 * 下面这些S11-S44实际上是\uFFFD \uFFFD4*4的矩阵，在原始的C实现中是\uFFFD#define 现的�?
 	 * 这里把它们实现成为static final是表示了只读，切能在同一个进程空间内的多\uFFFD Instance
 	 * 共\uFFFD
 	 */
@@ -74,7 +74,7 @@ public class MD5 {
 		return;
 	}
 
-	/* md5Init �?��初始化函数，初始化核心变量，装入标准的幻�? */
+	/* md5Init �?��初始化函数，初始化核心变量，装入标准的幻�? */
 	private void md5Init() {
 		count[0] = 0L;
 		count[1] = 0L;
@@ -207,7 +207,7 @@ public class MD5 {
 	}
 
 	/*
-	 * md5Memcpy �?��内部使用的byte数组的块拷贝函数，从input的inpos\uFFFD 把len长度\uFFFD
+	 * md5Memcpy �?��内部使用的byte数组的块拷贝函数，从input的inpos\uFFFD 把len长度\uFFFD
 	 * \uFFFD\uFFFD \uFFFD\uFFFD \uFFFD 字节拷贝到output的outpos位置\uFFFD \uFFFD
 	 */
 
@@ -308,8 +308,8 @@ public class MD5 {
 	}
 
 	/*
-	 * Encode把long数组按顺序拆成byte数组，因为java的long类型\uFFFD64bit �?只拆\uFFFD32bit
-	 * 以�?应原始C实现的用\uFFFD
+	 * Encode把long数组按顺序拆成byte数组，因为java的long类型\uFFFD64bit �?只拆\uFFFD32bit
+	 * 以�?应原始C实现的用\uFFFD
 	 */
 	private void Encode(byte[] output, long[] input, int len) {
 		int i, j;
@@ -323,7 +323,7 @@ public class MD5 {
 	}
 
 	/*
-	 * Decode byte数组按顺序合成成long数组，因为java的long类型\uFFFD64bit �?
+	 * Decode byte数组按顺序合成成long数组，因为java的long类型\uFFFD64bit �?
 	 * 只合成低32bit，高32bit清零，以适应原始C实现的用\uFFFD
 	 */
 	private void Decode(long[] output, byte[] input, int len) {

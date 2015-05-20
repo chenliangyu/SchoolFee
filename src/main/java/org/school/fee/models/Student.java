@@ -1,7 +1,10 @@
 package org.school.fee.models;
 
 import java.io.Serializable;
+import java.util.Date;
+
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -21,6 +24,9 @@ public class Student implements Serializable{
 	private String klass;
 	private String school;
 	private String phone;
+	@CreatedDate
+	private Date createDate;
+	
 	public ObjectId getId() {
 		return id;
 	}
@@ -81,5 +87,11 @@ public class Student implements Serializable{
 				+ ", age=" + age + ", fatherName=" + fatherName
 				+ ", motherName=" + motherName + ", klass=" + klass
 				+ ", school=" + school + ", phone=" + phone + "]";
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 }

@@ -101,6 +101,7 @@ public class PaymentController extends AbstractController {
 		payment.setFeeName(fee.getName());
 		payment.setFeeMoney(fee.getMoney());
 		payment.setStudentName(student.getName());
+		payment.setPhone(student.getPhone());
 		payment.setKlass(student.getKlass());
 		payment.setSchool(student.getSchool());
 		paymentService.addPayment(payment);

@@ -30,6 +30,7 @@ public class Payment implements Serializable{
 	private BigDecimal feeMoney;
 	private String klass;
 	private String school;
+	private String phone;
 	private List<PayRecord> money = new ArrayList<PayRecord>();
 	private int payMethod;
 	private int instalment;
@@ -232,6 +233,12 @@ public class Payment implements Serializable{
 				+ ", smsInterval=" + smsInterval + ", smsPeriod=" + smsPeriod
 				+ ", payResults=" + payResults + ", createDate=" + createDate
 				+ "]";
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 	
 }

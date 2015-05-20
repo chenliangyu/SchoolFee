@@ -56,6 +56,7 @@
                         <th>缴费类型</th>
                         <th>缴纳状态</th>
                         <th>缴纳记录</th>
+                        <th>手机</th>
                         <th>创建时间</th>
                         <th style="width: 250px">操作</th>
                     </tr>
@@ -108,6 +109,7 @@
                                 	</#list>
                                 	</ul>
                                 </td>
+                                <td>${data.phone}</td>
                                 <td>${data.createDate?string("yyyy年MM月dd日")}</td>
                                 <td>
                                     <a href="#modal-3" role="button" data-id="${data.id}" class="btn btn-primary btn-small pay_button" data-toggle="modal"><i class="icon-credit-card"></i> 缴费</a>

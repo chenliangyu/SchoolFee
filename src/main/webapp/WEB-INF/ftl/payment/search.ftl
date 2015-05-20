@@ -1,5 +1,5 @@
 <div id="modal-2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
- <form action="${url}0" method="post" class="form-horizontal form-row-separated search_form">
+ <form action="${url}/0" method="post" class="form-horizontal form-row-separated search_form">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel1">搜索选项</h3>
