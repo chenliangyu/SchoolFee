@@ -72,31 +72,34 @@ public class PaymentServiceImpl implements PaymentService{
 
 	public Page<Payment> listPayment(Integer page, Integer pageSize,
 			String studentName, String feeName, String klass, String school,
-			Boolean notClear, Date startDate, Date endDate, String orderBy,
+			Boolean notClear, PayMethod payMethod,Date startDate,
+			Date endDate,String orderBy,
 			String order) {
 		// TODO Auto-generated method stub
 		Pageable pageable = PageUtils.buildPageRequest(page, pageSize, orderBy, order);
 		return paymentDao.findPayment(pageable, null, studentName, klass, school, null, 
-				feeName, notClear, startDate, endDate);
+				feeName, notClear, payMethod,startDate, endDate);
 	}
 
 	public Page<Payment> listPaymentFromStudent(Integer page, Integer pageSize,
 			ObjectId studentId, String feeName, Boolean notClear,
-			Date startDate, Date endDate, String orderBy, String order) {
+			PayMethod payMethod,Date startDate,
+			Date endDate,String orderBy, String order) {
 		// TODO Auto-generated method stub
 		Pageable pageable = PageUtils.buildPageRequest(page, pageSize, orderBy, order);
 		return paymentDao.findPayment(pageable, studentId, null, null, null, null, 
-				feeName, notClear, startDate, endDate);
+				feeName, notClear, payMethod,startDate, endDate);
 	}
 
 	public Page<Payment> listPaymentFromFee(Integer page, Integer pageSize,
 			ObjectId feeId, String studentName, String klass, String school,
-			Boolean notClear, Date startDate, Date endDate, String orderBy,
+			Boolean notClear,PayMethod payMethod,Date startDate,
+			Date endDate, String orderBy,
 			String order) {
 		// TODO Auto-generated method stub
 		Pageable pageable = PageUtils.buildPageRequest(page, pageSize, orderBy, order);
 		return paymentDao.findPayment(pageable, null, studentName, klass, school, feeId, 
-				null, notClear, startDate, endDate);
+				null, notClear,payMethod,startDate, endDate);
 	}
 
 	public List<Payment> findNotClearPaymentByDate(Date date) {

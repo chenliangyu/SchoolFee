@@ -8,6 +8,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.school.fee.dao.AnalyticsDao;
 import org.school.fee.models.PayAnalytics;
+import org.school.fee.support.enums.PayMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +34,13 @@ public class AnalyticsDaoImpl implements AnalyticsDao {
 	MongoTemplate mongoTemplate;
 	
 	public Page<PayAnalytics> listAnalytics(Pageable pageable,ObjectId feeId,String feeName,
-			String studentName,String klass,String school,Boolean notClear,
+			String studentName,String klass,String school,Boolean notClear,PayMethod payMethod,
 			Date startDate,Date endDate) {
 		// TODO Auto-generated method stub
 		DBCollection dbCollection = mongoTemplate.getCollection("payment");
 		StringBuilder json = new StringBuilder();
 		json.append("[");
-		json.append(buildMatch(feeId,feeName,studentName,klass,school,notClear,startDate,endDate));
+		json.append(buildMatch(feeId,feeName,studentName,klass,school,notClear,payMethod,startDate,endDate));
 		json.append("{'$unwind':'$money'},");
 		json.append("{'$group':{");
 			json.append("'_id':{'feeId':'$feeId','studentId':'$studentId'},");
@@ -47,12 +48,17 @@ public class AnalyticsDaoImpl implements AnalyticsDao {
 			json.append("'school':{'$last':'$school'},");
 			json.append("'feeName':{'$last':'$feeName'},");
 			json.append("'payMethod':{'$last':'$payMethod'},");
+			json.append("'feeStartDate':{'$last':'$feeStartDate'},");
+			json.append("'feeEndDate':{'$last':'$feeEndDate'},");
 			json.append("'payTotal':{'$sum':'$money.money'},");
 			json.append("'total':{'$sum':'$feeMoney'},");
 			json.append("'createDate':{'$last':'$createDate'}");
 		json.append("}},");
 		json.append("{'$group':{");
-			json.append("'_id':{'feeId':'$_id.feeId','feeName':'$feeName','school':'$school','klass':'$klass'},");
+			json.append("'_id':{'feeId':'$_id.feeId','school':'$school','klass':'$klass'},");
+			json.append("'feeName':{'$last':'$feeName'},");
+			json.append("'feeStartDate':{'$last':'$feeStartDate'},");
+			json.append("'feeEndDate':{'$last':'$feeEndDate'},");
 			json.append("onepayStudentNumber:{$sum:{$cond:{if:{$eq:['$payMethod',0]},then:1,else:0}}},");
 			json.append("instalmentStudentNumber:{$sum:{$cond:{if:{$eq:['$payMethod',1]},then:1,else:0}}},");
 			json.append("onepayNotClearStudentNumber:{$sum:{$cond:{if:{$and:[{$eq:['$payMethod',0]},{$gt:['$total','$payTotal']}]},then:1,else:0}}},");
@@ -65,7 +71,9 @@ public class AnalyticsDaoImpl implements AnalyticsDao {
 		json.append("}},");
 		json.append("{'$group':{");
 			json.append("'_id':'$_id.feeId',");
-			json.append("'feeName':{'$last':'$_id.feeName'},");
+			json.append("'feeName':{'$last':'$feeName'},");
+			json.append("'startDate':{'$last':'$feeStartDate'},");
+			json.append("'endDate':{'$last':'$feeEndDate'},");
 			json.append("'result':{'$push':{'klass':'$_id.klass','school':'$_id.school','onepayStudentNumber':'$onepayStudentNumber',");
 			json.append("'instalmentStudentNumber':'$instalmentStudentNumber','onepayNotClearStudentNumber':'$onepayNotClearStudentNumber',");
 			json.append("'instalmentNotClearStudentNumber':'$instalmentNotClearStudentNumber','onepayPayTotal':'$onepayPayTotal',");
@@ -90,7 +98,7 @@ public class AnalyticsDaoImpl implements AnalyticsDao {
 		return new PageImpl<PayAnalytics>(payAnalyticses,pageable,total);
 	}
 	private Object buildMatch(ObjectId feeId, String feeName,String studentName, String klass,
-			String school, Boolean notClear, Date startDate, Date endDate) {
+			String school, Boolean notClear, PayMethod payMethod,Date startDate, Date endDate) {
 		Boolean hasFilter = false;
 		StringBuilder json = new StringBuilder();
 		json.append("{'$match':{");
@@ -123,6 +131,11 @@ public class AnalyticsDaoImpl implements AnalyticsDao {
 			json.append("'payResults.status':"+ (notClear?1:0));
 			hasFilter = true;
 		}
+		if(payMethod!=null){
+			if(hasFilter)json.append(",");
+			json.append("'payMethod':"+payMethod.ordinal());
+			hasFilter = true;
+		}
 		if(startDate!=null || endDate!=null){
 			if(hasFilter)json.append(",");
 			json.append("'payResults.expireDate':{");
@@ -148,7 +161,7 @@ public class AnalyticsDaoImpl implements AnalyticsDao {
 		StringBuilder json = new StringBuilder();
 		json.append("[");
 		json.append("{$group:{");
-			json.append("'_id':{feeId:'$feeId',feeName:'$feeName'}");
+			json.append("'_id':{feeId:'$feeId'}");
 		json.append("}},");
 		json.append("{$group:{");
 			json.append("'_id':null,'count':{$sum:1}");

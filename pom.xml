@@ -253,6 +253,13 @@
 		</dependency>
 
 
+		<!-- jasper report -->
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>6.0.4</version>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<finalName>SchoolFee</finalName>

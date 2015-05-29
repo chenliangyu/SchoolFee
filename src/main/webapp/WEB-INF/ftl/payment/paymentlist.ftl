@@ -30,11 +30,14 @@
 	                	<#if result.filter.school??>
 	                		<span class='label label-info'>学校：${result.filter.school}</span>
 	                	</#if>
+						<#if result.filter.payMethod??>
+							<span class='label label-info'><#if result.filter.payMethod=="onePay">一次付清<#else>分期付款</#if></span>
+						</#if>          	
 	                	<#if result.filter.startDate??>
-	                		<span class='label label-info'>过期时间晚于：${result.filter.startDate?string("yyyy年MM月dd日")}</span>
+	                		<span class='label label-info'>学期起始时间晚于：${result.filter.startDate?string("yyyy年MM月dd日")}</span>
 	                	</#if>
 	                	<#if result.filter.endDate??>
-	                		<span class='label label-info'>过期时间早于：${result.filter.endDate?string("yyyy年MM月dd日")}</span>
+	                		<span class='label label-info'>学期结束时间早于：${result.filter.endDate?string("yyyy年MM月dd日")}</span>
 	                	</#if>
 	                	<#if result.filter.notClear??>
 	                		<span class='label label-info'><#if result.filter.notClear>未结清<#else>已结清</#if></span>
@@ -58,7 +61,7 @@
                         <th>缴纳记录</th>
                         <th>手机</th>
                         <th>创建时间</th>
-                        <th style="width: 250px">操作</th>
+                        <th style="width: 126px">操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -72,7 +75,7 @@
                                 <td>${data.klass}</td>
                                 </#if>
                                 <#if !result.fee??>
-                                <td>${data.feeName}</td>
+                                <td>${data.feeName}<br/>(${data.feeStartDate?string("yyyy年MM月dd日")}-${data.feeEndDate?string("yyyy年MM月dd日")})</td>
                                 </#if>
                                 <td><#if (data.payMethod == 0)>一次付清<#else>分期:共${data.instalment}期</#if></td>
                                 <td>

@@ -14,38 +14,44 @@
 		<input type="hidden" name="notClear" value="${result.filter.notClear}" />
 	</#if>
 </form>
-<#if result.hasFilter??&& result.hasFilter>
-	<div style="margin:10px 0">
-		<span>当前列表统计选项：</span>
-		<#if result.filter.feeName??>
-			<span class='label label-info'>费用名：${result.filter.feeName}</span>
-		</#if>
-		<#if result.filter.studentName??>
-			<span class='label label-info'>学生姓名：${result.filter.studentName}</span>
-		</#if>
-		<#if result.filter.klass??>
-			<span class='label label-info'>班级：${result.filter.klass}</span>
-		</#if>
-		<#if result.filter.school??>
-			<span class='label label-info'>学校：${result.filter.school}</span>
-		</#if>
-		<#if result.filter.startDate??>
-			<span class='label label-info'>过期时间晚于：${result.filter.startDate?string("yyyy年MM月dd日")}</span>
-		</#if>
-		<#if result.filter.endDate??>
-			<span class='label label-info'>过期时间早于：${result.filter.endDate?string("yyyy年MM月dd日")}</span>
-		</#if>
-		<#if result.filter.notClear??>
-			<span class='label label-info'><#if result.filter.notClear>未结清<#else>已结清</#if></span>
-		</#if>
-	</div>
-</#if>
+<div class="clearfix">
+	<a class="btn btn-info pull-right" href="#modal-2" role="button" data-toggle="modal"><i class="icon-search"></i> 搜索</a>
+	<#if result.hasFilter??&& result.hasFilter>
+		<div style="margin:10px 0">
+			<span>当前列表统计选项：</span>
+			<#if result.filter.feeName??>
+				<span class='label label-info'>费用名：${result.filter.feeName}</span>
+			</#if>
+			<#if result.filter.studentName??>
+				<span class='label label-info'>学生姓名：${result.filter.studentName}</span>
+			</#if>
+			<#if result.filter.klass??>
+				<span class='label label-info'>班级：${result.filter.klass}</span>
+			</#if>
+			<#if result.filter.school??>
+				<span class='label label-info'>学校：${result.filter.school}</span>
+			</#if>
+			<#if result.filter.payMethod??>
+				<span class='label label-info'><#if result.filter.payMethod=="onePay">一次付清<#else>分期付款</#if></span>
+			</#if>     
+			<#if result.filter.startDate??>
+				<span class='label label-info'>学期起始时间晚于：${result.filter.startDate?string("yyyy年MM月dd日")}</span>
+			</#if>
+			<#if result.filter.endDate??>
+				<span class='label label-info'>学期结束时间早于：${result.filter.endDate?string("yyyy年MM月dd日")}</span>
+			</#if>
+			<#if result.filter.notClear??>
+				<span class='label label-info'><#if result.filter.notClear>未结清<#else>已结清</#if></span>
+			</#if>
+		</div>
+	</#if>
+</div>
 <#list result.analytics.content as data>
 <div class="row-fluid">
     <div class="span12">
         <div class="box">
             <div class="box-title">
-                <h3><i class="icon-table"></i> ${data.feeName}的统计情况</h3>
+                <h3><i class="icon-table"></i> ${data.feeName}(${data.startDate?string("yyyy年MM月dd日")}-${data.endDate?string("yyyy年MM月dd日")})的统计情况</h3>
                 <div class="box-tool">
                     <a data-action="collapse" href="#"><i class="icon-chevron-up"></i></a>
                 </div>

@@ -7,6 +7,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.school.fee.models.PayResult;
 import org.school.fee.models.Payment;
+import org.school.fee.support.enums.PayMethod;
 import org.springframework.data.domain.Page;
 
 public interface PaymentService {
@@ -19,13 +20,13 @@ public interface PaymentService {
 	public void pay(Payment payment,BigDecimal payMoney);
 	
 	public Page<Payment> listPayment(Integer page,Integer pageSize,String studentName,
-			String feeName,String klass,String school,Boolean notClear,Date startDate,
+			String feeName,String klass,String school,Boolean notClear,PayMethod payMethod,Date startDate,
 			Date endDate,String orderBy,String order);
 	public Page<Payment> listPaymentFromStudent(Integer page,Integer pageSize,ObjectId studentId,
-			String feeName,Boolean notClear,Date startDate,Date endDate,
-			String orderBy,String order);
+			String feeName,Boolean notClear,PayMethod payMethod,Date startDate,
+			Date endDate,String orderBy,String order);
 	public Page<Payment> listPaymentFromFee(Integer page,Integer pageSize,ObjectId feeId,
-			String studentName,	String klass,String school,Boolean notClear,
-			Date startDate,Date endDate,String orderBy,String order);
+			String studentName,	String klass,String school,Boolean notClear,PayMethod payMethod,Date startDate,
+			Date endDate,String orderBy,String order);
 	public List<Payment> findNotClearPaymentByDate(Date date);
 }

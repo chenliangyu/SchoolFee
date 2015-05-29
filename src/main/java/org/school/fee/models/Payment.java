@@ -27,6 +27,8 @@ public class Payment implements Serializable{
 	private String studentName;
 	private ObjectId feeId;
 	private String feeName;
+	private Date feeStartDate;
+	private Date feeEndDate;
 	private BigDecimal feeMoney;
 	private String klass;
 	private String school;
@@ -52,6 +54,8 @@ public class Payment implements Serializable{
 	public void setId(ObjectId id) {
 		this.id = id;
 	}
+	
+	/** copy student entity start  **/
 	public ObjectId getStudentId() {
 		return studentId;
 	}
@@ -64,6 +68,29 @@ public class Payment implements Serializable{
 	public void setStudentName(String studentName) {
 		this.studentName = studentName;
 	}
+	public String getKlass() {
+		return klass;
+	}
+	public void setKlass(String klass) {
+		this.klass = klass;
+	}
+	public String getSchool() {
+		return school;
+	}
+	public void setSchool(String school) {
+		this.school = school;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	/** copy student entity end  **/
+	
+	
+	
+	/** copy of fee entity start **/
 	public ObjectId getFeeId() {
 		return feeId;
 	}
@@ -82,42 +109,41 @@ public class Payment implements Serializable{
 	public void setFeeMoney(BigDecimal feeMoney) {
 		this.feeMoney = feeMoney;
 	}
+	public Date getFeeStartDate() {
+		return feeStartDate;
+	}
+	public void setFeeStartDate(Date feeStartDate) {
+		this.feeStartDate = feeStartDate;
+	}
+	public Date getFeeEndDate() {
+		return feeEndDate;
+	}
+	public void setFeeEndDate(Date feeEndDate) {
+		this.feeEndDate = feeEndDate;
+	}
+	/** copy of fee entity end **/
+	
 	public List<PayRecord> getMoney() {
 		return money;
 	}
 	public void setMoney(List<PayRecord> money) {
 		this.money = money;
 	}
-	public String getKlass() {
-		return klass;
-	}
-	public void setKlass(String klass) {
-		this.klass = klass;
-	}
-	public String getSchool() {
-		return school;
-	}
-	public void setSchool(String school) {
-		this.school = school;
-	}
-	public Boolean getSendNotify() {
-		return sendNotify;
-	}
-	public void setSendNotify(Boolean sendNotify) {
-		this.sendNotify = sendNotify;
-	}
-	public Boolean getSendMessage() {
-		return sendMessage;
-	}
-	public void setSendMessage(Boolean sendMessage) {
-		this.sendMessage = sendMessage;
-	}
+	
 	public int getPayMethod() {
 		return payMethod;
 	}
 	public void setPayMethod(int payMethod) {
 		this.payMethod = payMethod;
 	}
+	public List<PayResult> getPayResults() {
+		return payResults;
+	}
+	public void setPayResults(List<PayResult> payResults) {
+		this.payResults = payResults;
+	}
+	
+	/** instalment properties start **/
 	public int getInstalment() {
 		return instalment;
 	}
@@ -136,42 +162,63 @@ public class Payment implements Serializable{
 	public void setExpireDayOfWeek(Integer expireDayOfWeek) {
 		this.expireDayOfWeek = expireDayOfWeek;
 	}
-	public Date getCreateDate() {
-		return createDate;
-	}
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-	/**
-	 * @return the payResults
-	 */
-	public List<PayResult> getPayResults() {
-		return payResults;
-	}
-	/**
-	 * @param payResults the payResults to set
-	 */
-	public void setPayResults(List<PayResult> payResults) {
-		this.payResults = payResults;
-	}
-	/**
-	 * @return the expireDate
-	 */
-	public Date getExpireDate() {
-		return expireDate;
-	}
-	/**
-	 * @param expireDate the expireDate to set
-	 */
-	public void setExpireDate(Date expireDate) {
-		this.expireDate = expireDate;
-	}
 	public int getInstalmentMethod() {
 		return instalmentMethod;
 	}
 	public void setInstalmentMethod(int instalmentMethod) {
 		this.instalmentMethod = instalmentMethod;
 	}
+	/** instalment properties end **/
+	
+	
+	/** onepay properties start**/
+	public Date getExpireDate() {
+		return expireDate;
+	}
+	public void setExpireDate(Date expireDate) {
+		this.expireDate = expireDate;
+	}
+	/** onepay properties end**/
+	
+	/** notification and sms start **/
+	public Boolean getSendNotify() {
+		return sendNotify;
+	}
+	public void setSendNotify(Boolean sendNotify) {
+		this.sendNotify = sendNotify;
+	}
+	public Boolean getSendMessage() {
+		return sendMessage;
+	}
+	public void setSendMessage(Boolean sendMessage) {
+		this.sendMessage = sendMessage;
+	}
+	public int getSmsInterval() {
+		return smsInterval;
+	}
+	public void setSmsInterval(int smsInterval) {
+		this.smsInterval = smsInterval;
+	}
+	public int getSmsPeriod() {
+		return smsPeriod;
+	}
+	public void setSmsPeriod(int smsPeriod) {
+		this.smsPeriod = smsPeriod;
+	}
+	/** notification and sms end **/
+	
+	
+	/** created by mongodb start **/
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	/** created by mongodb end **/
+	
+	
+	/**  calculate properties start **/
 	public BigDecimal getInstalmentMoney(){
 		if(getPayMethod() == PayMethod.onePay.ordinal()){
 			return BigDecimal.ZERO;
@@ -206,26 +253,18 @@ public class Payment implements Serializable{
 		PayResult payResult = getPayResults().get(getPayResults().size() - 1);
 		return payResult.getRestMoney();
 	}
-	public int getSmsInterval() {
-		return smsInterval;
-	}
-	public void setSmsInterval(int smsInterval) {
-		this.smsInterval = smsInterval;
-	}
-	public int getSmsPeriod() {
-		return smsPeriod;
-	}
-	public void setSmsPeriod(int smsPeriod) {
-		this.smsPeriod = smsPeriod;
-	}
+	/**  calculate properties end **/
+	
+	
 	@Override
 	public String toString() {
 		return "Payment [id=" + id + ", studentId=" + studentId
 				+ ", studentName=" + studentName + ", feeId=" + feeId
-				+ ", feeName=" + feeName + ", feeMoney=" + feeMoney
-				+ ", klass=" + klass + ", school=" + school + ", money="
-				+ money + ", payMethod=" + payMethod + ", instalment="
-				+ instalment + ", expireDate=" + expireDate
+				+ ", feeName=" + feeName + ", feeStartDate=" + feeStartDate
+				+ ", feeEndDate=" + feeEndDate + ", feeMoney=" + feeMoney
+				+ ", klass=" + klass + ", school=" + school + ", phone="
+				+ phone + ", money=" + money + ", payMethod=" + payMethod
+				+ ", instalment=" + instalment + ", expireDate=" + expireDate
 				+ ", instalmentMethod=" + instalmentMethod
 				+ ", expireDayOfMonth=" + expireDayOfMonth
 				+ ", expireDayOfWeek=" + expireDayOfWeek + ", sendNotify="
@@ -234,11 +273,4 @@ public class Payment implements Serializable{
 				+ ", payResults=" + payResults + ", createDate=" + createDate
 				+ "]";
 	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-	
 }

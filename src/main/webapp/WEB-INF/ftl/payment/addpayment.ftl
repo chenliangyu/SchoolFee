@@ -23,7 +23,7 @@
                             <select class="span6" name="feeId" data-placeholder="Choose a Category" tabindex="1">
                                 <option>Select...</option>
                                 <#list result.feeList as fee>
-                                <option value='${fee.id}'>${fee.name}:${fee.money}</option>
+                                <option value='${fee.id}'>${fee.name}:${fee.money}元(${fee.startDate?string("yyyy年MM月dd日")}-${fee.endDate?string("yyyy年MM月dd日")})</option>
                                 </#list>
                              </select>
                              <#else>

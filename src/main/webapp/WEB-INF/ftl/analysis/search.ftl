@@ -1,45 +1,34 @@
 <div id="modal-2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
- <form action="${url}/0" method="post" class="form-horizontal form-row-separated search_form">
+ <form action="${ctx}/action/analytics/list/0" method="post" class="form-horizontal form-row-separated search_form">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel1">搜索选项</h3>
     </div>
     <div class="modal-body">
-    	<#if !result.student??>
-    		<div class="control-group">
-                <label for="klass" class="control-label">班级</label>
-                <div class="controls">
-                    <input type="text" name="klass" id="klass" class="input-large" value="${result.filter.klass}">
-                </div>
+		<div class="control-group">
+            <label for="klass" class="control-label">班级</label>
+            <div class="controls">
+                <input type="text" name="klass" id="klass" class="input-large" value="${result.filter.klass}">
             </div>
-            <div class="control-group">
-                <label for="school" class="control-label">学校</label>
-                <div class="controls">
-                    <input type="text" name="school" id="school" class="input-large" value="${result.filter.school}">
-                </div>
+        </div>
+        <div class="control-group">
+            <label for="school" class="control-label">学校</label>
+            <div class="controls">
+                <input type="text" name="school" id="school" class="input-large" value="${result.filter.school}">
             </div>
-            <div class="control-group">
-                <label for="studentName" class="control-label">学生姓名</label>
-                <div class="controls">
-                    <input type="text" name="studentName" id="studentName" class="input-large" value="${result.filter.studentName}">
-                </div>
+        </div>
+        <div class="control-group">
+            <label for="studentName" class="control-label">学生姓名</label>
+            <div class="controls">
+                <input type="text" name="studentName" id="studentName" class="input-large" value="${result.filter.studentName}">
             </div>
-    		<#if !result.fee??>
-        		<div class="control-group">
-                    <label for="feeName" class="control-label">费用名</label>
-                    <div class="controls">
-                        <input type="text" name="feeName" id="feeName" class="input-large" value="${result.filter.feeName}">
-                    </div>
-                </div>
-    		</#if>
-    	<#else>
-    		<div class="control-group">
-                <label for="feeName" class="control-label">费用名</label>
-                <div class="controls">
-                    <input type="text" name="feeName" id="feeName" class="input-large" value="${result.filter.feeName}">
-                </div>
+        </div>
+		<div class="control-group">
+            <label for="feeName" class="control-label">费用名</label>
+            <div class="controls">
+                <input type="text" name="feeName" id="feeName" class="input-large" value="${result.filter.feeName}">
             </div>
-    	</#if>
+        </div>
         <div class="control-group">
               <label class="control-label">付款方式</label>
                <div class="controls">

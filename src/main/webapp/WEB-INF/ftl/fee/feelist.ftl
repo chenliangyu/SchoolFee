@@ -24,6 +24,8 @@
                         <th style="width: 18px"><input type="checkbox" /></th>
                         <th>费用名</th>
                         <th>应缴金额</th>
+                        <th>开始日期</th>
+                        <th>结束日期</th>
                         <th style="width: 300px">操作</th>
                     </tr>
                     </thead>
@@ -34,6 +36,8 @@
                                 <td><input type="checkbox" name="ids" value="${data.id}" class='student_id' /></td>
                                 <td>${data.name}</td>
                                 <td>${data.money}</td>
+                                <td>${data.startDate?string("yyyy年MM月dd日")}</td>
+                                <td>${data.endDate?string("yyyy年MM月dd日")}</td>
                                 <td>
                                 	<a class="btn btn-primary btn-small"  href="${ctx}/action/payment/fee/${data.id}/0"><i class="icon-reorder"></i> 缴费记录</a>
                                     <a class="btn btn-info btn-small edit_button"  href="#" data-id="${data.id}"><i class="icon-edit"></i> 编辑</a>

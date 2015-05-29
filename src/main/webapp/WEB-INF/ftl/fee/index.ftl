@@ -6,6 +6,7 @@
 		<#assign title="费用管理">
 		<#assign description="">
     	<#include "common/meta.ftl">
+    	<link rel="stylesheet" type="text/css" href="${ctx}/assets/bootstrap-datepicker/css/datepicker.css">
     </head>
     <body>
        	<#include "common/updatebrowser.ftl">
@@ -51,6 +52,7 @@
         <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>-->
         <script>window.jQuery || document.write('<script src="${ctx}/assets/jquery/jquery-1.10.1.min.js"><\/script>')</script>
         <script src="${ctx}/assets/bootstrap/bootstrap.min.js"></script>
+        <script type="text/javascript" src="${ctx}/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
         <script src="${ctx}/assets/nicescroll/jquery.nicescroll.min.js"></script>
 		<script src="${ctx}/assets/jquery.json.min.js"></script>
         <!--page specific plugin scripts-->
@@ -133,7 +135,16 @@
 				fields.each(function(){
 					var key = $(this).attr("data-key");
 					if(data && data[key]){
-						$(this).val(data[key]);
+						var d = data[key];
+						if(key === "startDate" || key === "endDate"){
+							var date = new Date(d)
+							d = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+							$(this).val(d);
+							$(this).datepicker("update");
+							$(this).parent().datepicker("update",d);
+						}else{
+							$(this).val(d);
+						}
 					}	
 				})
 			}

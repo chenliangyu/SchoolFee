@@ -9,6 +9,7 @@ import org.school.fee.models.Fee;
 import org.school.fee.models.PayAnalytics;
 import org.school.fee.models.Payment;
 import org.school.fee.service.AnalyticsService;
+import org.school.fee.support.enums.PayMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class AnalyticsController extends AbstractController {
 	
 	@RequestMapping("/list/{pageNo}")
 	public ModelAndView listByPage(@PathVariable Integer pageNo,Integer pageSize,
-			String feeId,String studentName,String klass,String feeName,String school,Boolean notClear,
+			String feeId,String studentName,String klass,String feeName,String school,Boolean notClear,PayMethod payMethod,
 			Date startDate,Date endDate){
 		logger.debug("uri:{}","/action/analytics/list/");
 		logger.debug("pageParam[page:{},pageSize:{}]",pageNo,pageSize);
@@ -55,6 +56,9 @@ public class AnalyticsController extends AbstractController {
 		if(feeName!=null && !feeName.equals("")){
 			filter.put("feeName", feeName);
 		}
+		if(payMethod!=null){
+			filter.put("payMethod",payMethod);
+		}
 		if(startDate!=null && !startDate.equals("")){
 			filter.put("startDate", startDate);
 		}
@@ -70,7 +74,7 @@ public class AnalyticsController extends AbstractController {
 		result.put("filter", filter);
 		result.put("hasFilter",filter.keySet().size() != 0);
 		Page<PayAnalytics> analytics = analyticsService.analytics(pageNo, pageSize,
-				fee,feeName,studentName,klass,school,notClear,startDate,endDate);
+				fee,feeName,studentName,klass,school,notClear,payMethod,startDate,endDate);
 		result.put("analytics", analytics);
 		return new ModelAndView("/analysis/index").addObject("result", result);
 	}

@@ -52,6 +52,7 @@
                 </div>
                 <!-- END Breadcrumb -->
                 <!-- BEGIN Main Content -->
+                	<#include "analysis/search.ftl" />
                    <#include "analysis/list.ftl" />
                 <!-- END Main Content -->
                 <footer>
@@ -69,6 +70,7 @@
         <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>-->
         <script>window.jQuery || document.write('<script src="${ctx}/assets/jquery/jquery-1.10.1.min.js"><\/script>')</script>
         <script src="${ctx}/assets/bootstrap/bootstrap.min.js"></script>
+        <script type="text/javascript" src="${ctx}/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
         <script src="${ctx}/assets/nicescroll/jquery.nicescroll.min.js"></script>
         <script src="${ctx}/assets/jquery.json.min.js"></script>
         <!--page specific plugin scripts-->

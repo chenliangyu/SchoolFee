@@ -8,9 +8,11 @@ import java.util.List;
 
 
 
+
 import org.bson.types.ObjectId;
 import org.school.fee.dao.PaymentDao;
 import org.school.fee.models.Payment;
+import org.school.fee.support.enums.PayMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,7 @@ public class PaymentDaoImpl implements PaymentDao {
 
 	public Page<Payment> findPayment(Pageable page, ObjectId studentId,
 			String studentName, String klass, String school, ObjectId feeId,
-			String feeName, Boolean notClear, Date startDate, Date endDate) {
+			String feeName, Boolean notClear, PayMethod payMethod,Date startDate, Date endDate) {
 		// TODO Auto-generated method stub
 		/*List<Criteria> criterias = buildCriteria(studentId, studentName, klass, school, feeId, feeName, startDate, endDate);
 		long total = countPayment(criterias,studentId, studentName, klass, school, feeId,
@@ -54,16 +56,10 @@ public class PaymentDaoImpl implements PaymentDao {
 			limit(page.getPageSize())
 		);
 		AggregationResults<Payment> results = mongoTemplate.aggregate(agg,Payment.class,Payment.class);*/
-		Query query = buildQuery(studentId, studentName, klass, school, feeId, feeName, notClear, startDate, endDate);
+		Query query = buildQuery(studentId, studentName, klass, school, feeId, feeName, notClear,payMethod, startDate, endDate);
 		query.with(page);
 		List<Payment> payments = mongoTemplate.find(query, Payment.class);
 		/*
-		
-		
-		
-		
-		
-		
 		
 		DBCollection dbCollection = mongoTemplate.getCollection("payment");
 		StringBuilder json = new StringBuilder();
@@ -95,13 +91,13 @@ public class PaymentDaoImpl implements PaymentDao {
 			DBObject dbObject = outputIt.next();
 			payments.add(mongoTemplate.getConverter().read(Payment.class, dbObject));
 		}*/
-		long total = countPayment(studentId, studentName, klass, school, feeId, feeName, notClear, startDate, endDate);
+		long total = countPayment(studentId, studentName, klass, school, feeId, feeName, notClear,payMethod,startDate, endDate);
 		return new PageImpl<Payment>(payments, page, total);
 	}
 	
 	private Query buildQuery(ObjectId studentId,
 			String studentName, String klass, String school, ObjectId feeId,
-			String feeName, Boolean notClear, Date startDate, Date endDate){
+			String feeName, Boolean notClear,PayMethod payMethod,Date startDate, Date endDate){
 		Query query = new Query();
 		if(studentId!=null){
 			query.addCriteria(Criteria.where("studentId").is(studentId));
@@ -128,15 +124,19 @@ public class PaymentDaoImpl implements PaymentDao {
 			}
 			
 		}
+		if(payMethod!=null){
+			query.addCriteria(Criteria.where("payMethod").is(payMethod.ordinal()));
+		}
 		if(startDate!=null && endDate!=null && startDate.equals(endDate)){
-			query.addCriteria(Criteria.where("payResults.expireDate").is(startDate));
+			query.addCriteria(Criteria.where("feeStartDate").is(startDate));
+			query.addCriteria(Criteria.where("feeEndDate").is(endDate));
 		}else if(startDate !=null || endDate!= null){
 			List<Criteria> dateCriterias = new ArrayList<Criteria>();
 			if(startDate!=null){
-				dateCriterias.add(Criteria.where("payResults.expireDate").gte(startDate));
+				dateCriterias.add(Criteria.where("feeStartDate").gte(startDate));
 			}
 			if(endDate!=null){
-				dateCriterias.add(Criteria.where("payResults.expireDate").lte(endDate));
+				dateCriterias.add(Criteria.where("feeEndDate").lte(endDate));
 			}
 			query.addCriteria(new Criteria().andOperator(dateCriterias.toArray(new Criteria[dateCriterias.size()])));
 		}
@@ -156,9 +156,9 @@ public class PaymentDaoImpl implements PaymentDao {
 	
 	public long countPayment(ObjectId studentId,
 			String studentName, String klass, String school, ObjectId feeId,
-			String feeName, Boolean notClear, Date startDate, Date endDate){
+			String feeName, Boolean notClear,PayMethod payMethod,Date startDate, Date endDate){
 		
-		Query query = buildQuery(studentId, studentName, klass, school, feeId, feeName, notClear, startDate, endDate);
+		Query query = buildQuery(studentId, studentName, klass, school, feeId, feeName, notClear, payMethod,startDate, endDate);
 		long total = mongoTemplate.count(query, Payment.class);
 		
 		
@@ -308,7 +308,7 @@ public class PaymentDaoImpl implements PaymentDao {
 
 	public List<Payment> findNotClearPaymentByExpireDate(Date expireDate) {
 		// TODO Auto-generated method stub
-		Query query = buildQuery(null, null, null, null, null, null, true, null, expireDate);
+		Query query = buildQuery(null, null, null, null, null, null, true,null, null, expireDate);
 		/*
 		
 		DBCollection dbCollection = mongoTemplate.getCollection("payment");
